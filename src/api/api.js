@@ -1,8 +1,8 @@
 import axios from 'axios';
  
-const API = axios.create({ baseURL: 'http://localhost:5000/api' });
+const API = axios.create({ baseURL: 'https://pmstoolbackend.onrender.com/api' });
 
-const BASE_URL = "http://localhost:5000/api/board";
+const BASE_URL = "https://pmstoolbackend.onrender.com/api/board";
  
 export const registerUser = (userData) => API.post('/auth/register', userData);
 export const loginUser = (userData) => API.post('/auth/login', userData);
@@ -109,7 +109,7 @@ export const updateTaskCard = (taskCardData) => API.post('/auth/updatetaskcardli
 
 
 export const getBoards = async () => {
-    const response = await axios.get("http://localhost:5000/api/board/boards");
+    const response = await axios.get("https://pmstoolbackend.onrender.com/api/board/boards");
     return response.data;
   };
 
