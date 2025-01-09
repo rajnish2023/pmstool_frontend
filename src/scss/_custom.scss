@@ -1,0 +1,25 @@
+// Here you can add other styles
+
+.header > .container-fluid{
+    min-height: calc(3rem + 1px);
+    background-color:#323a49d1;
+   
+
+}
+
+.header-nav .nav-link{
+    color: #fff;
+    
+}
+
+.header-nav .show > .nav-link, .header-nav .nav-link.active{
+color: #fff;
+}
+
+.sidebar-dark{
+    background-color: #323a49;
+}
+
+.modal-content{
+    background-color: rgb(244, 245, 247);
+}
