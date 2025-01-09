@@ -36,7 +36,7 @@ import PrivateRoute from './PrivateRoute';
 
 const routes = [
   { path: '/', exact: true, name: 'Home', element: <PrivateRoute element={DefaultLayout} /> },
-  { path: '/', exact: true, name: 'Home', element: <PrivateRoute element={Dashboard} /> },
+  // { path: '/', exact: true, name: 'Home', element: <PrivateRoute element={Dashboard} /> },
   { path: '/today-tasks', name: 'Today Tasks', element: <PrivateRoute element={TodayTasks} /> },
   { path: '/view-all-tasks', name: 'View All Tasks', element: <PrivateRoute element={ViewAllTasks} /> },
   { path: '/dashboard', name: 'Dashboard', element: <PrivateRoute element={Dashboard} /> },
