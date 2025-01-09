@@ -24,7 +24,7 @@ const AppContent = () => {
             );
           })}
           <Route path="/" element={<Navigate to="login" replace />} />
-          <Route path="*" element={<Navigate to="/404" replace />} />
+          <Route path="*" element={<Navigate to="/index.html" replace />} />
         </Routes>
       </Suspense>
     </CContainer>
