@@ -16,6 +16,8 @@ import {
 import CIcon from '@coreui/icons-react'
 import { useNavigate } from 'react-router-dom'
 import { getUserProfile} from '../../api/api'
+
+import { Link } from 'react-router-dom'
  
 
 
@@ -56,13 +58,17 @@ const UserLogout = () => {
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-body-secondary fw-semibold my-2">Settings</CDropdownHeader>
-        <CDropdownItem href="/user-profile">
+        <CDropdownItem>
+          <Link to="/user-profile" style={{textDecoration:"none",color:"#252b36f2"}}>
           <CIcon icon={cilUser} className="me-2" />
           Profile
+          </Link>
         </CDropdownItem>
-        <CDropdownItem href="/user-change-password">
+        <CDropdownItem>
+        <Link to="/user-change-password" style={{textDecoration:"none",color:"#252b36f2"}}>
           <CIcon icon={cilSettings} className="me-2" />
           Change Password
+          </Link>
         </CDropdownItem>
         
         <CDropdownDivider />
