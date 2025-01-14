@@ -1,51 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { getUserProfile } from './api/api';
+import { getUserProfile } from './api/api';   
 
-const isAuthenticated = () => {
-    return localStorage.getItem('token');
-};
+const isAuthenticated = () => localStorage.getItem('token');  
 
-const PrivateRoute = ({ element: Component, ...rest }) => {
-    const [isAuth, setIsAuth] = useState(null);
-    const [loadingError, setLoadingError] = useState(null);
+const PrivateRoute = ({ element: Component, allowedRoles }) => {
+  const [isAuth, setIsAuth] = useState(null);
+  const [userRole, setUserRole] = useState(null);
 
-    useEffect(() => {
-        const checkAuth = async () => {
-            const token = isAuthenticated();
-            
-            // Check if there's a token in localStorage
-            if (!token) {
-                setIsAuth(false);
-                return;
-            }
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = isAuthenticated();
+      if (!token) {
+        setIsAuth(false);  
+        return;
+      }
 
-            try {
-                // Attempt to get user profile
-                await getUserProfile(token);
-                setIsAuth(true); // If the API call succeeds, set as authenticated
-            } catch (error) {
-                // Log error for debugging
-                console.error('Authentication failed:', error);
-                <navigate to="/login" />;
-                setIsAuth(false); // Set as not authenticated
-            }
-        };
+      try {
+        const user = await getUserProfile(token);    
+        setUserRole(user.data.role);  
+        setIsAuth(true);
+      } catch (err) {
+        console.error("Error fetching user profile:", err);   
+        setIsAuth(false);  
+      }
+    };
 
-        checkAuth();
-    }, []);
+    fetchUser();
+  }, []);
 
-    // Loading state and error display
-    if (isAuth === null) {
-        return <div>Loading...</div>;
-    }
+  if (isAuth === null) return <div>Loading...</div>;  
+ 
+  if (!isAuth || (allowedRoles && !allowedRoles.includes(userRole))) {
+    return <Navigate to="/login" />;  
+  }
 
-    if (loadingError) {
-        return <div>{loadingError}</div>; // Show error message
-    }
-
-    // If authenticated, render the requested component, otherwise redirect to login
-    return isAuth ? <Component {...rest} /> : <Navigate to="/login" />;
+  return <Component />;   
 };
 
 export default PrivateRoute;

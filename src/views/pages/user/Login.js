@@ -33,7 +33,15 @@ const Login = () => {
           const response = await getUserProfile(token);
           // If the token is valid, navigate to the dashboard
           if (response.status === 200) {
-            navigate('/dashboard');
+            if(response.data.role=='1'){
+              navigate('/users');
+             }
+             else if(response.data.role=='2'){
+              navigate('/dashboard')
+             }
+             else if(response.data.role=='3'){
+              navigate('/today-tasks')
+             }
           }
         } catch (err) {
           // If token is invalid, clear it and remain on the login page
@@ -57,7 +65,18 @@ const Login = () => {
 
       // Save token to localStorage
       localStorage.setItem('token', token);
-      navigate('/dashboard');
+      if(response.data.userData.role=='1'){
+        navigate('/users');
+       }
+       else if(response.data.userData.role=='2'){
+        navigate('/dashboard')
+       }
+       else if(response.data.userData.role=='3'){
+        navigate('/today-tasks')
+       }
+       else{
+        alert("not able to login");
+       }
     } catch (err) {
       setError('Invalid email or password');
     }
