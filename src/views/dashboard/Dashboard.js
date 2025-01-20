@@ -45,8 +45,8 @@ const Dashboard = () => {
   const [filePreview, setFilePreview] = useState(null);
 
 
-  const socket = io('https://pmstoolbackend.onrender.com/'); 
-  const APP_URL = 'https://pmstoolbackend.onrender.com/';
+  const socket = io('https://pmstoolbackend.onrender.com'); 
+  const APP_URL = 'https://pmstoolbackend.onrender.com';
      useEffect(() => {
             
             if (taskToEdit) {

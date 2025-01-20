@@ -7,7 +7,7 @@ import { getAllTasksAuth,getUserProfile, makeTaskTodayAuth, makeSubTaskTodayAuth
 import { io } from 'socket.io-client';
 
 const socket = io('https://pmstoolbackend.onrender.com');
-const APP_URL = 'https://pmstoolbackend.onrender.com/';
+const APP_URL = 'https://pmstoolbackend.onrender.com';
 
 const ViewAllTasks = () => {
     const [tasks, setTasks] = useState([]); // Store tasks from the API
