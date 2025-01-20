@@ -11,6 +11,7 @@ export const resetPassword = (userData) => API.post('/auth/reset-password', user
 // export const changePassword = (userData) => API.post('/auth/change-password', userData);
 // export const updatePassword = (userData) => API.post('/auth/update-password', userData);
 export const getUser = () => API.get('/auth/users');
+export const updateUser =(userData) => API.put('/auth/updateuser',userData);
 
 // user auth api header pass toker authorize 
 
