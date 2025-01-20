@@ -534,7 +534,7 @@ const handleEditTask = async () => {
                     setShowModal(true);
                   }}
                 >
-                  Create Board
+                  Create Project
                 </CButton>
               )}
               <CInputGroup style={{ width: '250px' }} className="rounded-pill">
