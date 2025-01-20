@@ -52,7 +52,8 @@ const UserLogout = () => {
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
         <CAvatar size="md" style={{borderRadius: '50%', backgroundColor: '#5856d6', color: '#fff'}}>
-        {userDetails.username ? `${userDetails.username.charAt(0).toUpperCase()}${userDetails.username.charAt(userDetails.username.length - 1).toUpperCase()}` : ''}
+        {/* {userDetails.username ? `${userDetails.username.charAt(0).toUpperCase()}${userDetails.username.charAt(userDetails.username.length - 1).toUpperCase()}` : ''} */}
+        {userDetails.username ? userDetails.username.split(' ').map((name) => name.charAt(0).toUpperCase()).join('') : ''}
         </CAvatar>
          
       </CDropdownToggle>
