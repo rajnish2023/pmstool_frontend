@@ -24,7 +24,7 @@ import {
   CContainer,
   CForm,
 } from '@coreui/react';
-import { getUser, registerUser } from '../../../api/api'; // Assuming registerUser API call
+import { getUser, registerUser, updateUser,updateUserStatus } from '../../../api/api';
 
 import CIcon from '@coreui/icons-react';
 import { cilLockLocked, cilUser } from '@coreui/icons';
@@ -33,7 +33,9 @@ const AllUsers = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [error, setError] = useState(null);
-  const [createModalVisible, setCreateModalVisible] = useState(false); // State for Create User modal
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const [newUser, setNewUser] = useState({
     username: '',
     email: '',
@@ -42,6 +44,7 @@ const AllUsers = () => {
     role: '',
   });
   const [searchTerm, setSearchTerm] = useState('');
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -79,6 +82,16 @@ const AllUsers = () => {
     });
   };
 
+  const openEditModal = (user) => {
+    setCurrentUser(user);
+    setEditModalVisible(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalVisible(false);
+    setCurrentUser(null);
+  };
+
   const handleCreateSubmit = async (e) => {
     e.preventDefault();
     if (newUser.password !== newUser.repeatPassword) {
@@ -105,6 +118,23 @@ const AllUsers = () => {
     }
   };
 
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await updateUser(currentUser);
+
+      setUsers(users.map(user => (user._id === currentUser._id ? currentUser : user)));
+      setFilteredUsers(filteredUsers.map(user => (user._id === currentUser._id ? currentUser : user)));
+      alert('User updated successfully');
+      closeEditModal();
+      console.log(response.data);
+    } catch (error) {
+      console.error('Update error:', error);
+      alert('Update failed');
+    }
+  };
+
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -115,11 +145,25 @@ const AllUsers = () => {
     setFilteredUsers(filtered);
   };
 
+  const handleStatusChange = async (user) => {
+    const updatedUser = { ...user, status: !user.status };
+    try {
+     const response =  await updateUserStatus(token, updatedUser);
+      console.log(response);
+      setUsers(users.map(u => (u._id === user._id ? updatedUser : u)));
+      setFilteredUsers(filteredUsers.map(u => (u._id === user._id ? updatedUser : u)));
+       
+    } catch (error) {
+      console.error('Status update error:', error);
+      alert('Status update failed');
+    }
+  };
+
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4 shadow-lg">
-          <CCardHeader style={{ backgroundColor: '#323a49d1', color: '#fff', padding: '15px' }}>
+          <CCardHeader style={{ backgroundColor: '#5e6d77', color: '#fff', padding: '15px' }}>
             <strong>All Users</strong>
             {/* Search Input on the right side */}
             <div style={{ float: 'right', width: '250px' }}>
@@ -128,7 +172,7 @@ const AllUsers = () => {
                 placeholder="Search by username or email"
                 value={searchTerm}
                 onChange={handleSearchChange}
-                style={{ borderRadius: '20px', padding: '8px' }}
+                style={{ borderRadius: '20px', padding: '8px', backgroundColor: '#f4f7fa' }}
               />
             </div>
           </CCardHeader>
@@ -141,7 +185,12 @@ const AllUsers = () => {
                   <CButton
                     color="primary"
                     onClick={openCreateModal}
-                    style={{ borderRadius: '20px', fontSize: '16px' }}
+                    style={{
+                      borderRadius: '20px',
+                      fontSize: '16px',
+                      backgroundColor: '#4e73df',
+                      borderColor: '#4e73df',
+                    }}
                   >
                     + Create User
                   </CButton>
@@ -153,7 +202,8 @@ const AllUsers = () => {
                       <CTableHeaderCell scope="col">Username</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                       <CTableHeaderCell scope="col">Role</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                      {/* <CTableHeaderCell scope="col">Status</CTableHeaderCell> */}
+                      <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
@@ -163,14 +213,29 @@ const AllUsers = () => {
                         <CTableDataCell>{user.username}</CTableDataCell>
                         <CTableDataCell>{user.email}</CTableDataCell>
                         <CTableDataCell>{roleMapping[user.role]}</CTableDataCell>
+                        {/* <CTableDataCell>
+                        <CFormSwitch
+                        id="status"
+                        name="status"
+                        checked={user.status === "active"}
+                        onChange={() => handleStatusChange(user)}  
+                        />
+                        </CTableDataCell> */}
+
                         <CTableDataCell>
-                          <CFormSwitch
-                            id="status"
-                            name="status"
-                            labelOn=""
-                            labelOff=""
-                            defaultChecked={user.status}
-                          />
+                          <CButton
+                            color="info"
+                            variant="outline"
+                            onClick={() => openEditModal(user)}
+                            style={{
+                              borderRadius: '20px',
+                              fontSize: '14px',
+                              padding: '5px 15px',
+                              borderColor: '#17a2b8',
+                            }}
+                          >
+                            Edit
+                          </CButton>
                         </CTableDataCell>
                       </CTableRow>
                     ))}
@@ -184,7 +249,7 @@ const AllUsers = () => {
 
       {/* Create User Modal */}
       <CModal visible={createModalVisible} onClose={closeCreateModal} size="lg">
-        <CModalHeader style={{ backgroundColor: '#323a49', color: '#fff' }}>
+        <CModalHeader>
           <strong>Create User</strong>
         </CModalHeader>
         <CModalBody>
@@ -259,6 +324,64 @@ const AllUsers = () => {
           </CButton>
         </CModalFooter>
       </CModal>
+
+      {/* Edit User Modal */}
+      {currentUser && (
+        <CModal visible={editModalVisible} onClose={closeEditModal} size="lg">
+          <CModalHeader>
+            <strong>Edit User</strong>
+          </CModalHeader>
+          <CModalBody>
+            <CForm onSubmit={handleEditSubmit}>
+              <CInputGroup className="mb-3">
+                <CInputGroupText><CIcon icon={cilUser} /></CInputGroupText>
+                <CFormInput
+                  name="username"
+                  placeholder="Username"
+                  value={currentUser.username}
+                  onChange={(e) => setCurrentUser({ ...currentUser, username: e.target.value })}
+                  style={{ borderRadius: '10px', padding: '10px' }}
+                />
+              </CInputGroup>
+              <CInputGroup className="mb-3">
+                <CInputGroupText>@</CInputGroupText>
+                <CFormInput
+                  name="email"
+                  placeholder="Email"
+                  value={currentUser.email}
+                  onChange={(e) => setCurrentUser({ ...currentUser, email: e.target.value })}
+                  style={{ borderRadius: '10px', padding: '10px' }}
+                />
+              </CInputGroup>
+              <CInputGroup className="mb-3">
+                <CInputGroupText><CIcon icon={cilUser} /></CInputGroupText>
+                <CFormSelect
+                  name="role"
+                  options={[
+                    'Select Role',
+                    { label: 'Admin', value: '1' },
+                    { label: 'Manager', value: '2' },
+                    { label: 'Staff', value: '3' },
+                  ]}
+                  value={currentUser.role}
+                  onChange={(e) => setCurrentUser({ ...currentUser, role: e.target.value })}
+                  style={{ borderRadius: '10px', padding: '10px' }}
+                />
+              </CInputGroup>
+              <div className="d-grid mb-3">
+                <CButton color="primary" type="submit" style={{ borderRadius: '20px' }}>
+                  Update User
+                </CButton>
+              </div>
+            </CForm>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="secondary" onClick={closeEditModal} style={{ borderRadius: '20px' }}>
+              Cancel
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      )}
     </CRow>
   );
 };

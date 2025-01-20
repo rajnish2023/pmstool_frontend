@@ -43,6 +43,20 @@ export const updateUserProfile = async (token, userData) => {
   }
 };
 
+export const updateUserStatus = async (token,userData) =>{
+  try{
+    const response = API.put('/auth/updaateuserstatus',userData,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  }catch(error){
+    console.error('Something wentwrong',error);
+    throw error;
+  }
+}
+
 //update password
 export const changePassword = async (token,userData) => {
   try {
