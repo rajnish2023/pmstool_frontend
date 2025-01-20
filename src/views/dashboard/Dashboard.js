@@ -587,15 +587,17 @@ const handleEditTask = async () => {
                               const user = users.find(user => user._id === assignee);
                               if (user) {
                                 const username = user.username;
-                                const firstLetter = username.charAt(0).toUpperCase();
-                                const lastLetter = username.charAt(username.length - 1).toUpperCase();
+                                // const firstLetter = username.charAt(0).toUpperCase();
+                                // const lastLetter = username.charAt(username.length - 1).toUpperCase();
+                                const initials = username.split(' ').map((name) => name.charAt(0).toUpperCase()).join('');
                                 return (
                                   <span
                                     key={assignee}
                                     className="badge bg-primary me-2"
                                     style={{ borderRadius: '50%', padding: '10px' }}
                                   >
-                                    {firstLetter}{lastLetter}
+                                    {/* {firstLetter}{lastLetter} */}
+                                    { initials}
                                   </span>
                                 );
                               }
