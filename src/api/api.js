@@ -366,6 +366,40 @@ export const makeSubTaskCompleteAuth = async (token, taskId, subTaskId) => {
 }
 
 
+//task activity section  
+
+export const gettaskactivity = async(token,taskId) => {
+  try{
+    const response = await API.get(`/authTaskActivity/getTaskActivities/${taskId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  }
+  catch (error) {
+    console.error('Error getting while fetching taskactivity:', error);
+    throw error;
+  }
+}
+
+
+export const sendtaskactivity = async(token, activityData) => {
+  try {
+    const response = await API.post(`/authTaskActivity/sendTaskActivities`, activityData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error('Error while sending activity', error);
+    throw error;
+  }
+}
+
 
 
  
