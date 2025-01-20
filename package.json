@@ -54,6 +54,7 @@
     "reactstrap": "^9.2.3",
     "redux": "5.0.1",
     "simplebar-react": "^3.2.6",
+    "socket.io-client": "^4.8.1",
     "uuid": "^11.0.3"
   },
   "devDependencies": {
