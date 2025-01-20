@@ -288,7 +288,7 @@ setFilePreview({ type: 'document', name: file.name, url: URL.createObjectURL(fil
           color="success"
           autohide={3000}
         >
-          Board created successfully!
+          Project created successfully!
         </CToast>
       );
       
@@ -327,7 +327,7 @@ setFilePreview({ type: 'document', name: file.name, url: URL.createObjectURL(fil
           color="success"
           autohide={3000}
         >
-          Board updated successfully!
+          Project updated successfully!
         </CToast>
       );
     } catch (error) {
@@ -517,7 +517,7 @@ const handleEditTask = async () => {
         <CCard className="mb-4" style={{ border: '1px solid #ddd', borderRadius: '10px' }}>
           <CCardHeader className="d-flex justify-content-between align-items-center border-0" style={{ backgroundColor: '#f8f9fa' }}>
             <div className="d-flex align-items-center">
-              <strong className="fs-4">Boards</strong>
+              <strong className="fs-4">Projects</strong>
             </div>
             <div className="d-flex align-items-center">
               <CButton color="warning" className="me-3" variant="outline"><Link to="/today-tasks" style={{ textDecoration: 'none' }}>
@@ -658,7 +658,7 @@ const handleEditTask = async () => {
   ) : (
     <CCol>
       <CCardBody className="text-center">
-        <h5>No boards found</h5>
+        <h5>No projects found</h5>
       </CCardBody>
     </CCol>
   )}
@@ -669,7 +669,7 @@ const handleEditTask = async () => {
       {/* Create Board Modal */}
       <CModal visible={showModal} onClose={() => setShowModal(false)} className="rounded-3" backdrop="static">
         <CModalHeader className="border-0">
-          <CModalTitle>Create Board</CModalTitle>
+          <CModalTitle>Create Project</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
@@ -720,7 +720,7 @@ const handleEditTask = async () => {
       {/* Edit Board Modal */}
       <CModal visible={editModal} onClose={() => setEditModal(false)} className="rounded-3">
         <CModalHeader className="border-0">
-          <CModalTitle>Edit Board</CModalTitle>
+          <CModalTitle>Edit Project</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
