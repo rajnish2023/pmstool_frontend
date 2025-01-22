@@ -539,7 +539,7 @@ const handleEditTask = async () => {
               )}
               <CInputGroup style={{ width: '250px' }} className="rounded-pill">
                 <CFormInput
-                  placeholder="Search for boards..."
+                  placeholder="Search for projects..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="rounded-pill"
