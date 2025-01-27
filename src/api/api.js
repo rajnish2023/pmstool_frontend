@@ -417,6 +417,23 @@ export const sendtaskactivity = async(token, activityData) => {
 
 //new updated API method
 
+// get tasks by authoken with status 
+
+export const getTasksByStatusAuth = async (token, status) => {
+  try {
+    const response = API.get(`/authBoard/authgettasksbystatus/${status}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  }
+  catch (error) {
+    console.error('Error fetching tasks:', error);
+    throw error;   
+  }
+}
+
 // update task status by authuser token with task id
 
 export const updateTaskStatusAuth = async (token, taskId, status) => {
