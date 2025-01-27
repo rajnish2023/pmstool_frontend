@@ -27,11 +27,11 @@ const Login = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Validate the token by calling the getUserProfile API
+       
       const validateToken = async () => {
         try {
           const response = await getUserProfile(token);
-          // If the token is valid, navigate to the dashboard
+        
           if (response.status === 200) {
             if(response.data.role=='1'){
               navigate('/users');
@@ -40,11 +40,11 @@ const Login = () => {
               navigate('/dashboard')
              }
              else if(response.data.role=='3'){
-              navigate('/today-tasks')
+              navigate('/tasks/in-progress')
              }
           }
         } catch (err) {
-          // If token is invalid, clear it and remain on the login page
+          
           localStorage.removeItem('token');
         }
       };
@@ -72,7 +72,7 @@ const Login = () => {
         navigate('/dashboard')
        }
        else if(response.data.userData.role=='3'){
-        navigate('/today-tasks')
+        navigate('/tasks/in-progress')
        }
        else{
         alert("not able to login");

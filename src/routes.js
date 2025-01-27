@@ -3,6 +3,8 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const TodayTasks = React.lazy(() => import('./views/dashboard/TodayTasks'))
 const ViewAllTasks = React.lazy(() => import('./views/dashboard/ViewAllTasks'))
 
+const Tasks = React.lazy(() => import('./views/dashboard/Tasks'))
+
 //Users
 const Register = React.lazy(() => import('./views/pages/user/Register'))
 const UserProfile = React.lazy(() => import('./views/pages/user/Profile'))
@@ -23,6 +25,7 @@ const routes = [
   { path: '/user-change-password', name: 'User Change Password', element: <PrivateRoute element={UserChangePassword} allowedRoles={['1', '2', '3']} /> },
   { path: '/users', name: 'Users', element: <PrivateRoute element={Users} allowedRoles={['1']} /> },
   { path: '/404', name: 'Page 404', element: Page404, allowedRoles: [] },
+  { path: '/tasks/:status', name: 'View All Tasks by Status', element: <PrivateRoute element={Tasks} allowedRoles={['2','3']} /> },
     
 ]
 

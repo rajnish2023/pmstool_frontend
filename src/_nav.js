@@ -35,12 +35,39 @@ const _nav = [
     ],
   },
 
-   {
-    component: CNavItem,
-    name: 'Assigned Tasks',
-    to: '/today-tasks',
+  //  {
+  //   component: CNavItem,
+  //   name: 'Assigned Tasks',
+  //   to: '/today-tasks',
+  //   icon: <CIcon icon={cilTask} customClassName="nav-icon" />,
+  //   showForRoles: [3],
+  // },
+
+  {
+    component: CNavGroup,
+    name: 'All Tasks',
+    to: '/view-all-tasks',
     icon: <CIcon icon={cilTask} customClassName="nav-icon" />,
     showForRoles: [3],
+    
+    items: [
+      {
+        component: CNavItem,
+        name: 'Inprogress',
+        to: '/tasks/in-progress',
+        
+      },
+      {
+        component: CNavItem,
+        name: 'ToDo',
+        to: '/tasks/pending',
+      },
+      {
+        component: CNavItem,
+        name: 'Completed',
+        to: '/tasks/completed',
+      }
+    ],
   },
 
   

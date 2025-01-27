@@ -415,6 +415,60 @@ export const sendtaskactivity = async(token, activityData) => {
   }
 }
 
+//new updated API method
+
+// update task status by authuser token with task id
+
+export const updateTaskStatusAuth = async (token, taskId, status) => {
+  try {
+    const response = API.put(`/authBoard/authupdatetaskstatus/${taskId}`, { status }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error('Error updating task status:', error);
+    throw error;   
+  }
+};
+
+
+//updateTaskProgressAuth 
+
+export const updateTaskProgressAuth = async (token, taskId, progress) => {
+  try {
+    const response = API.put(`/authBoard/authupdatetaskprogress/${taskId}`, { progress }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error('Error updating task progress:', error);
+    throw error;   
+  }
+};
+
+//updateSubTaskProgressAuth
+
+export const updateSubTaskProgressAuth = async (token, taskId, subTaskId, subtaskprogress) => {
+  try {
+    const response = API.put(`/authBoard/authupdatesubtaskprogress/${taskId}/${subTaskId}`, { subtaskprogress }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error('Error updating subtask progress:', error);
+    throw error;   
+  }
+};
+
+
+
+
 
 
  
