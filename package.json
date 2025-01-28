@@ -2,7 +2,7 @@
   "name": "@dynamics-square/pms-tool",
   "version": "5.2.0",
   "description": "Dynamics Square PMS Tool",
-  "homepage": "./",
+  "homepage": ".",
   "bugs": {
     "url": "https://github.com/your-repo/issues"
   },
