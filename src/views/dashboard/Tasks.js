@@ -431,6 +431,7 @@ const fetchTaskActivity = async (taskId) => {
                                                         className="mx-2"
                                                         onClick={() => toggleChat(task._id)}
                                                          >
+                                                        
                                                         <FaComments  /> Comments
                                                          </CButton>
                                                          {openChats[task._id] && (
