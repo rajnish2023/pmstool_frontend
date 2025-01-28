@@ -611,7 +611,7 @@ const handleEditTask = async () => {
                         </td>
                         <td>
                           {task.dueDate
-                            ? new Date(task.dueDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                            ? new Date(task.dueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
                             : 'Not Set'}
                         </td>
                         <td>
