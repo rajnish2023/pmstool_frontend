@@ -343,9 +343,12 @@ const fetchTaskActivity = async (taskId) => {
                     </span>
                 </td>
                 <td>
-                    {task.dueDate
+                    {/* {task.dueDate
                         ? new Date(task.dueDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-                        : 'Not Set'}
+                        : 'Not Set'} */}
+                         {task.dueDate
+                ? new Date(task.dueDate).toISOString().split('T')[0]
+                : 'Not Set'}
                 </td>
                 <td>
                     <span
