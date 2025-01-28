@@ -20,6 +20,32 @@ const _nav = [
     showForRoles: [2],
      
   },
+ 
+  {
+    component: CNavGroup,
+    name: 'All Tasks',
+    to: '/buttons',
+    icon: <CIcon icon={cilTask} customClassName="nav-icon" />,
+    showForRoles: [2],
+    items: [
+      {
+        component: CNavItem,
+        name: 'Inprogress',
+        to: '/tasks/in-progress',
+      },
+      {
+        component: CNavItem,
+        name: 'Todo',
+        to: '/tasks/pending',
+      },
+      {
+        component: CNavItem,
+        name: 'Completed',
+        to: '/tasks/completed',
+      }
+    ],
+  },
+
   {
     component: CNavGroup,
     name: 'Staff Management',
