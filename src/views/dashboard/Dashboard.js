@@ -610,9 +610,14 @@ const handleEditTask = async () => {
                           )}
                         </td>
                         <td>
-                          {task.dueDate
-                            ? new Date(task.dueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
-                            : 'Not Set'}
+                        {task.dueDate
+  ? new Date(task.dueDate).toLocaleDateString('en-IN', { 
+      day: '2-digit', 
+      month: 'short', 
+      year: 'numeric', 
+      timeZone: 'Asia/Kolkata' 
+    })
+  : 'Not Set'}
                         </td>
                         <td>
                           <span
