@@ -15,6 +15,7 @@ const CreateTaskModal = ({ isOpen, toggleModal, onTaskCreated }) => {
     const [tasks, setTasks] = useState([]);
     const [subtasks, setSubtasks] = useState([]);
     const [dueDate, setDueDate] = useState('');
+    const [loading, setLoading] = useState(false);
     const token = localStorage.getItem('token');
 
     const fetchUsers = async () => {
@@ -159,6 +160,7 @@ const CreateTaskModal = ({ isOpen, toggleModal, onTaskCreated }) => {
             dueDate: formValues.dueDate,
             subtasks: subtasks
         };
+        setLoading(true);
 
         try {
             const response = await createTaskAuth(token, selectedBoard, taskData);
@@ -169,9 +171,22 @@ const CreateTaskModal = ({ isOpen, toggleModal, onTaskCreated }) => {
         } catch (error) {
             console.error('Error creating task:', error);
         }
+        finally {
+            setLoading(false); 
+        }
     };
 
     return (
+        <>
+        {loading && (
+            <div className="loading-overlay">
+                <div className="loading-content">
+                    <CSpinner color="primary" size="lg" />
+                    <p>Please wait, your task is being created...</p>
+                </div>
+            </div>
+        )}
+       
         <CModal visible={isOpen} onClose={toggleModal} size="xl" backdrop="static">
             <CModalHeader>
                 <CModalTitle>Create New Task</CModalTitle>
@@ -351,6 +366,7 @@ const CreateTaskModal = ({ isOpen, toggleModal, onTaskCreated }) => {
                 </CForm>
             </CModalBody>
         </CModal>
+        </>
     );
 };
 
