@@ -179,8 +179,6 @@ const fetchTaskActivity = async (taskId) => {
         };
 
         const handleEditTaskClick = (task) => {
-     
-          setTaskToEdit(task);
           setNewTaskTitle(task.title);
           setTaskDescription(task.description);
           setEditTaskModalVisible(true);
