@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CButton, CForm, CFormInput, CFormTextarea, CFormSelect, CAvatar } from '@coreui/react';
+import { CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CButton, CForm, CFormInput, CFormTextarea, CFormSelect, CAvatar,CSpinner  } from '@coreui/react';
 import { FaPlusCircle } from 'react-icons/fa';
 import { createTaskAuth, getBoards, getUser, getAllTasksAuth } from '../../api/api'; 
 
