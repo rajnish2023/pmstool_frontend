@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { CCard, CCardBody, CCardHeader, CCol, CButton, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CModal, CModalHeader, CModalBody, CModalFooter, CFormInput, CProgress } from '@coreui/react';
-import {FaPlus ,FaComments,FaTimes,FaPaperclip,FaPaperPlane,FaFileAlt,FaDownload} from 'react-icons/fa';
+import {FaPlus ,FaComments,FaTimes,FaPaperclip,FaPaperPlane,FaFileAlt,FaDownload,FaEye} from 'react-icons/fa';
 import './dashboard.css';
 import { getTasksByStatusAuth, updateTaskStatusAuth, updateTaskProgressAuth,updateSubTaskProgressAuth,getUserProfile,sendtaskactivity,gettaskactivity } from '../../api/api';  // Import API functions
 import CreateTaskModal from './StaffCreateTask';
@@ -30,6 +30,9 @@ const Tasks = () => {
     const [messageContent, setMessageContent] = useState('');
      const [files, setFiles] = useState(null);
      const [userDetails, setUserDetails] = useState({});
+     const [editTaskModalVisible, setEditTaskModalVisible] = useState(false);
+     const [newTaskTitle, setNewTaskTitle] = useState('');
+     const [taskDescription, setTaskDescription] = useState('');
  
     const openCreateTaskModal = () => {
         setIsModalOpen(true);  
@@ -175,7 +178,14 @@ const fetchTaskActivity = async (taskId) => {
             }
         };
 
-
+        const handleEditTaskClick = (task) => {
+     
+          setTaskToEdit(task);
+          setNewTaskTitle(task.title);
+          setTaskDescription(task.description);
+          setEditTaskModalVisible(true);
+           
+        };
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -433,6 +443,9 @@ const fetchTaskActivity = async (taskId) => {
                                                          >
                                                         
                                                         <FaComments  /> Comments
+                                                         </CButton>
+                                                         <CButton size="sm" color="warning" variant="outline" onClick={() => handleEditTaskClick(task)}>
+                                                        <FaEye  /> View Task
                                                          </CButton>
                                                          {openChats[task._id] && (
   <div
@@ -911,6 +924,33 @@ const fetchTaskActivity = async (taskId) => {
             </CModal>
  
             <CreateTaskModal isOpen={isModalOpen} toggleModal={closeCreateTaskModal} onTaskCreated={handleTaskCreated} />
+
+             {/* Edit Task Modal */}
+             <CModal visible={editTaskModalVisible} onClose={() => setEditTaskModalVisible(false)} className="rounded-3" backdrop="static" size="lg">
+                     <CModalHeader className="border-0">
+                     <CModalTitle>Task Details</CModalTitle>
+                     </CModalHeader>
+                     <CRow>
+                       <CCol xs={12}>
+                       <CModalBody>
+                     <strong>Task</strong>
+                     <CFormInput
+                     placeholder="Task Title"
+                     value={newTaskTitle}
+                     onChange={(e) => setNewTaskTitle(e.target.value)}
+                     className="mb-3 mt-3"
+                     />
+                     <strong>Description</strong>
+                     <textarea
+                     placeholder="Task Description"
+                     value={taskDescription}
+                     onChange={(e) => setTaskDescription(e.target.value)}
+                     className="form-control mb-3 mt-3"
+                     />
+                 </CModalBody>
+                </CCol>
+             </CRow>  
+               </CModal>
         </CCol>
     );
 };
