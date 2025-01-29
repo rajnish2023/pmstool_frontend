@@ -12,6 +12,7 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
+  CSpinner
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cilLockLocked } from '@coreui/icons';
@@ -23,6 +24,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -58,6 +60,8 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true);
+
     e.preventDefault();
     try {
       const response = await loginUser(formData);
@@ -80,9 +84,21 @@ const Login = () => {
     } catch (err) {
       setError('Invalid email or password');
     }
+    finally{
+      setLoading(false);
+    }
   };
 
   return (
+    <>
+     {loading && (
+          <div className="loading-overlay">
+          <div className="loading-content">
+          <CSpinner color="primary" size="lg" />
+          <p>Please wait, Login processing...</p>
+          </div>
+          </div>
+        )}
     <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light-gradient">
       <CContainer>
         <CRow className="justify-content-center">
@@ -155,6 +171,8 @@ const Login = () => {
         </CRow>
       </CContainer>
     </div>
+    </>
+    
   );
 };
 
