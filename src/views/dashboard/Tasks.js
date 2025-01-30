@@ -233,14 +233,23 @@ const fetchTaskActivity = async (taskId) => {
  
     // Function to handle status update
     const handleStatusChange = async (taskId, newStatus) => {
+      setLoadingTask(true);
         try {
             const response = await updateTaskStatusAuth(token, taskId, newStatus);
             if (response && response.data) {
                 // Update the task status locally without re-fetching
                 setTasks(prevTasks => prevTasks.map(task => task._id === taskId ? { ...task, status: newStatus } : task));
+                toast.success(`Task has been moved to ${response.data.task.status}`, {
+                  position: "top-right",
+                  autoClose: 3000,
+                  hideProgressBar: true,
+              });
             }
         } catch (err) {
             console.error('Error updating task status:', err);
+        }
+        finally{
+          setLoadingTask(false);
         }
     };
  
