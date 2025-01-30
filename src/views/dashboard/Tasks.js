@@ -259,7 +259,7 @@ const fetchTaskActivity = async (taskId) => {
             alert('Please enter a valid percentage (0-100)');
             return;
         }
- 
+        setLoadingTask(true)
         try {
             const response = await updateTaskProgressAuth(token, selectedTaskId, progress); // Update task progress
             if (response && response.data) {
@@ -271,6 +271,9 @@ const fetchTaskActivity = async (taskId) => {
             }
         } catch (err) {
             console.error('Error updating task progress:', err);
+        }
+        finally{
+          setLoadingTask(false)
         }
     };
 
