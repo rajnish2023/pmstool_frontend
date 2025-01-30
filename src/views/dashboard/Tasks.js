@@ -439,6 +439,7 @@ const fetchTaskActivity = async (taskId) => {
                         {task.status === 'in-progress' && (
                             <CButton
                                 color="primary"
+                                variant="outline"
                                 onClick={() => {
                                     setSelectedTaskId(task._id);
                                     setProgress(task.progress || 0);
@@ -897,6 +898,7 @@ const fetchTaskActivity = async (taskId) => {
                         {task.status === 'in-progress' && (
                             <CButton
                                 color="primary"
+                                variant="outline"
                                 onClick={() => {
                                     setSelectedTaskId(task._id);
                                     setSelectedSubTaskId(subtask._id);
