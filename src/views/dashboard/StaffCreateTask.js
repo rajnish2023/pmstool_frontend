@@ -165,8 +165,9 @@ const CreateTaskModal = ({ isOpen, toggleModal, onTaskCreated }) => {
         try {
             const response = await createTaskAuth(token, selectedBoard, taskData);
             if (response.data.newTask) {
-                onTaskCreated(response.data.newTask);  
-                toggleModal(); 
+                onTaskCreated(response.data.newTask); 
+                toggleModalWithReset(); 
+                // toggleModal(); 
             }
         } catch (error) {
             console.error('Error creating task:', error);
@@ -175,6 +176,26 @@ const CreateTaskModal = ({ isOpen, toggleModal, onTaskCreated }) => {
             setLoading(false); 
         }
     };
+
+ // Reset form fields
+ const resetForm = () => {
+    setTaskName('');
+    setTaskDescription('');
+    setSelectedBoard('');
+    setSelectedUsers([]);
+    setSubtasks([]);
+    setDueDate('');
+    setErrors({});
+    setError(null);
+};
+
+// Close modal and reset form
+const toggleModalWithReset = () => {
+    resetForm();  // Reset the form fields
+    toggleModal(); // Close the modal
+};
+
+
 
     return (
         <>
