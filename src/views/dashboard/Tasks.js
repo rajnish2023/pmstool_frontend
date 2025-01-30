@@ -7,6 +7,9 @@ import { getTasksByStatusAuth, updateTaskStatusAuth, updateTaskProgressAuth,upda
 import CreateTaskModal from './StaffCreateTask';
 import { io } from 'socket.io-client';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const socket = io('https://pmstoolbackend.onrender.com');
 const APP_URL = 'https://pmstoolbackend.onrender.com';
  
@@ -295,6 +298,26 @@ const fetchTaskActivity = async (taskId) => {
         if (percentage <= 70) return 'warning'; // Orange
         return 'success'; // Green
     };
+
+    const handleReopenTask = async (taskId) => {
+      try {
+        const response = await updateTaskStatusAuth(token, taskId, 'in-progress'); // Change status to 'in-progress'
+        if (response && response.data) {
+          setTasks(prevTasks =>
+            prevTasks.map(task =>
+              task._id === taskId ? { ...task, status: 'in-progress', progress: 90 } : task
+            )
+          );
+          toast.success('Task has been reopened and progress set to 90%', {
+            position: "top-right",   
+            autoClose: 3000,   
+            hideProgressBar: true, 
+        });
+        }
+      } catch (err) {
+        console.error('Error reopening task:', err);
+      }
+    };
  
     // Render loading, error, or tasks
     if (loading) return <p>Loading...</p>;
@@ -408,7 +431,7 @@ const fetchTaskActivity = async (taskId) => {
                 </td>
                <td>
     {/* Status Update Dropdown */}
-    {task.status !== 'completed' && (
+    
         <CDropdown>
             <CDropdownToggle color="secondary" size="sm">
                 Move to
@@ -429,9 +452,14 @@ const fetchTaskActivity = async (taskId) => {
                         ToDo List
                     </CDropdownItem>
                 )}
+                {task.status === 'completed' && (
+  <CDropdownItem onClick={() => handleReopenTask(task._id)}>
+    Reopen Task
+  </CDropdownItem>
+)}
             </CDropdownMenu>
         </CDropdown>
-    )}
+    
     <CButton
                                                         size="sm"
                                                         color="info"
@@ -949,6 +977,7 @@ const fetchTaskActivity = async (taskId) => {
                 </CCol>
              </CRow>  
                </CModal>
+               <ToastContainer />
         </CCol>
     );
 };
