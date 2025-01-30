@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { CCard, CCardBody, CCardHeader, CCol, CButton, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle,CRow , CModal,CModalTitle , CModalHeader, CModalBody, CModalFooter, CFormInput, CProgress } from '@coreui/react';
+import { CCard, CCardBody, CCardHeader, CCol, CButton, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle,CRow , CModal,CModalTitle , CModalHeader, CModalBody, CModalFooter, CFormInput, CProgress, CSpinner } from '@coreui/react';
 import {FaPlus ,FaComments,FaTimes,FaPaperclip,FaPaperPlane,FaFileAlt,FaDownload,FaEye} from 'react-icons/fa';
 import './dashboard.css';
 import { getTasksByStatusAuth, updateTaskStatusAuth, updateTaskProgressAuth,updateSubTaskProgressAuth,getUserProfile,sendtaskactivity,gettaskactivity } from '../../api/api';  // Import API functions
@@ -16,6 +16,7 @@ const APP_URL = 'https://pmstoolbackend.onrender.com';
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);  
     const [loading, setLoading] = useState(true);
+    const [loadingtask, setLoadingTask] = useState(false);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showProgressModal, setShowProgressModal] = useState(false);  
@@ -300,6 +301,7 @@ const fetchTaskActivity = async (taskId) => {
     };
 
     const handleReopenTask = async (taskId) => {
+      setLoadingTask(true);
       try {
         const response = await updateTaskStatusAuth(token, taskId, 'in-progress'); // Change status to 'in-progress'
         if (response && response.data) {
@@ -317,6 +319,9 @@ const fetchTaskActivity = async (taskId) => {
       } catch (err) {
         console.error('Error reopening task:', err);
       }
+      finally{
+        setLoadingTask(false);
+      }
     };
  
     // Render loading, error, or tasks
@@ -324,7 +329,16 @@ const fetchTaskActivity = async (taskId) => {
     if (error) return <p>Error: {error}</p>;
  
     return (
-        <CCol xs={12}>
+      <>
+      {loadingtask && (
+                      <div className="loading-overlay">
+                          <div className="loading-content">
+                              <CSpinner color="primary" size="lg" />
+                              <p>Please wait, your request is processing...</p>
+                          </div>
+                      </div>
+                  )}
+      <CCol xs={12}>
             <CCard className="mb-4" style={{ border: '1px solid #ddd', borderRadius: '10px' }}>
                 <CCardHeader className="d-flex justify-content-between align-items-center border-0" style={{ backgroundColor: '#f8f9fa' }}>
                     <div className="d-flex align-items-center">
@@ -979,6 +993,8 @@ const fetchTaskActivity = async (taskId) => {
                </CModal>
                <ToastContainer />
         </CCol>
+      </>
+        
     );
 };
  
