@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { CCard, CCardBody, CCardHeader, CCol, CButton, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle,CRow , CModal,CModalTitle , CModalHeader, CModalBody, CModalFooter, CFormInput, CProgress, CSpinner } from '@coreui/react';
+import { CCard, CCardBody, CCardHeader, CCol, CButton, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle,CRow , CModal,CModalTitle , CModalHeader, CModalBody, CModalFooter, CFormInput, CProgress, CSpinner,CAvatar } from '@coreui/react';
 import {FaPlus ,FaComments,FaTimes,FaPaperclip,FaPaperPlane,FaFileAlt,FaDownload,FaEye} from 'react-icons/fa';
 import './dashboard.css';
-import { getTasksByStatusAuth, updateTaskStatusAuth, updateTaskProgressAuth,updateSubTaskProgressAuth,getUserProfile,sendtaskactivity,gettaskactivity } from '../../api/api';  // Import API functions
+import { getTasksByStatusAuth, updateTaskStatusAuth, updateTaskProgressAuth,updateSubTaskProgressAuth,getUserProfile,sendtaskactivity,gettaskactivity,getBoards,getUser } from '../../api/api';  // Import API functions
 import CreateTaskModal from './StaffCreateTask';
 import { io } from 'socket.io-client';
 
@@ -32,11 +32,87 @@ const Tasks = () => {
     const [chatMessages, setChatMessages] = useState([]);
     const [filePreview, setFilePreview] = useState(null);
     const [messageContent, setMessageContent] = useState('');
-     const [files, setFiles] = useState(null);
-     const [userDetails, setUserDetails] = useState({});
-     const [editTaskModalVisible, setEditTaskModalVisible] = useState(false);
-     const [newTaskTitle, setNewTaskTitle] = useState('');
-     const [taskDescription, setTaskDescription] = useState('');
+    const [files, setFiles] = useState(null);
+    const [userDetails, setUserDetails] = useState({});
+    const [editTaskModalVisible, setEditTaskModalVisible] = useState(false);
+    const [newTaskTitle, setNewTaskTitle] = useState('');
+    const [taskDescription, setTaskDescription] = useState('');
+    const [boards, setBoards] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [editToTasks, seteditToTask] = useState(null);
+    const [subtasks, setSubtasks] = useState([]); 
+     const [priority, setPriority] = useState('medium');
+     const [selectedAssignees, setSelectedAssignees] = useState([]);
+     const [selectedBoardForTask, setSelectedBoardForTask] = useState(null);
+
+
+     const handleAddSubtask = () => {
+      setSubtasks([
+        ...subtasks,
+        {
+          title: '',         
+          assignedTo: '',    
+          priority: 'high',    
+          dueDate: '',        
+          completed: false    
+        }
+      ]);
+    };
+   
+    const handleSubtaskChange = (index, field, value) => {
+      if (field === 'dueDate') {
+        const taskDueDate = new Date(dueDate);  
+        const subtaskDueDate = new Date(value); 
+    
+        if (subtaskDueDate > taskDueDate) {
+          alert("Subtask's due date must be earlier than the task's due date.");
+          return;  
+        }
+      }
+      const updatedSubtasks = [...subtasks];
+      updatedSubtasks[index][field] = value;
+      setSubtasks(updatedSubtasks);
+    };
+
+   const handleEditTask = async () => {
+     
+       const updatedTaskData = {
+         title: newTaskTitle,
+         description: taskDescription,     
+         assignees: selectedAssignees,  
+         TaskStatus:'pending',                           
+         priority,  
+         subtasks                      
+       };
+   
+       try {
+         const updatedTask = await updateTaskAuth(token,editToTasks._id, updatedTaskData);
+        setEditTaskModalVisible(false);
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task._id === editToTasks._id ? updatedTask.data.task : task
+          )
+        );
+        setTaskToEdit(null);
+       } catch (error) {
+         setError('Error editing task. Please try again later.');
+         console.error('Error editing task', error);
+       }
+     };
+
+     const fetchBoards = async () => {
+         try {
+           const response = await getBoards();
+           if (Array.isArray(response.boards)) {
+             setBoards(response.boards);
+           } else {
+             setError('Unexpected data format. Boards should be an array.');
+           }
+         } catch (error) {
+           setError('Error fetching boards. Please try again later.');
+           console.error('Error fetching boards', error);
+         }
+       };
  
     const openCreateTaskModal = () => {
         setIsModalOpen(true);  
@@ -182,12 +258,42 @@ const fetchTaskActivity = async (taskId) => {
             }
         };
 
-        const handleEditTaskClick = (task) => {
-          setNewTaskTitle(task.title);
-          setTaskDescription(task.description);
-          setEditTaskModalVisible(true);
-           
-        };
+ // Get background color for user avatar
+ const getBackGroundColor = () => {
+  const colors = ['#007bff'];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
+
+const handleTaskUserSelection = (user) => {
+  const updatedAssignees = selectedAssignees.includes(user._id)
+    ? selectedAssignees.filter((u) => u !== user._id)
+    : [...selectedAssignees, user._id];
+  setSelectedAssignees(updatedAssignees);
+};
+const handleEditTaskClick = (task) => {
+  seteditToTask(task);
+  setSelectedBoardForTask(task.board._id);
+  setNewTaskTitle(task.title);
+  setTaskDescription(task.description);
+  setEditTaskModalVisible(true);
+   setNewTaskTitle(task.title);
+   setTaskDescription(task.description);
+   setPriority(task.priority);
+   setSelectedAssignees(task.assignees);
+   setEditTaskModalVisible(true);
+   setSubtasks(task.subtasks || []);
+   
+};
+const getUserInitials = (user) => {
+  return user.username
+    .split(' ')
+    .map((name) => name[0])
+    .join('')
+    .toUpperCase();
+};
+
+
+       
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -211,6 +317,8 @@ const fetchTaskActivity = async (taskId) => {
         };
  
         fetchTasks();
+        fetchBoards();
+        fetchUsers();
         getUserDetails();
     }, [token, status]);  
  
@@ -980,31 +1088,164 @@ const fetchTaskActivity = async (taskId) => {
             <CreateTaskModal isOpen={isModalOpen} toggleModal={closeCreateTaskModal} onTaskCreated={handleTaskCreated} />
 
              {/* Edit Task Modal */}
-             <CModal visible={editTaskModalVisible} onClose={() => setEditTaskModalVisible(false)} className="rounded-3" backdrop="static" size="lg">
-                     <CModalHeader className="border-0">
-                     <CModalTitle>Task Details</CModalTitle>
-                     </CModalHeader>
-                     <CRow>
-                       <CCol xs={12}>
-                       <CModalBody>
-                     <strong>Task</strong>
-                     <CFormInput
-                     placeholder="Task Title"
-                     value={newTaskTitle}
-                     onChange={(e) => setNewTaskTitle(e.target.value)}
-                     className="mb-3 mt-3"
-                     />
-                     <strong>Description</strong>
-                     <textarea
-                     placeholder="Task Description"
-                     value={taskDescription}
-                     onChange={(e) => setTaskDescription(e.target.value)}
-                     className="form-control mb-3 mt-3"
-                     />
-                 </CModalBody>
-                </CCol>
-             </CRow>  
-               </CModal>
+             <CModal visible={editTaskModalVisible} onClose={() => setEditTaskModalVisible(false)} className="rounded-3" backdrop="static" size="xl">
+          <CModalHeader className="border-0">
+          <CModalTitle>Edit Task</CModalTitle>
+          </CModalHeader>
+          <CRow>
+            <CCol xs={12}>
+            <CModalBody>
+          <strong>Task</strong>
+          <CFormInput
+          placeholder="Task Title"
+          value={newTaskTitle}
+          onChange={(e) => setNewTaskTitle(e.target.value)}
+          className="mb-3"
+          />
+          <strong>Description</strong>
+          <textarea
+          placeholder="Task Description"
+          value={taskDescription}
+          onChange={(e) => setTaskDescription(e.target.value)}
+          className="form-control mb-3"
+          />
+
+<div className="mb-3">
+    <strong>Assignees</strong>
+    <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+    {boards
+  .find(board => board._id === selectedBoardForTask)?.users.map((user) => (
+    <div key={user} className="d-flex align-items-center mb-2">
+      <CAvatar
+        size="sm"
+        className="me-2"
+        style={{
+          backgroundColor: getBackGroundColor(),
+          cursor: 'pointer',
+          color: 'white',
+        }}
+        onClick={() => handleTaskUserSelection(user)}
+      >
+        {getUserInitials(user)}  
+      </CAvatar>
+      <span
+        onClick={() => handleTaskUserSelection(user)}
+        className={`text-truncate ${selectedAssignees.includes(user._id) ? 'fw-bold' : ''}`}
+        style={{ maxWidth: '120px', cursor: 'pointer' }}
+      >
+         {user.username} 
+      </span>
+    </div>
+  ))
+}
+
+    </div>
+</div>
+
+
+        <div className="mb-3">
+        <strong>Subtasks</strong>
+        {/* Display the subtasks */}
+        <div className="mb-4">
+        {subtasks.length > 0 ? (
+        <table className="table table-striped table-bordered table-hover">
+          <thead className="table-light">
+            <tr style={{ fontSize: '13px' }}>
+              <th scope="col">Title</th>
+              <th scope="col">Assignee</th>
+              <th scope="col">Priority</th>
+              {/* <th scope="col">Action</th> */}
+            </tr>
+          </thead>
+          <tbody>
+            {subtasks.map((subtask, index) => (
+              <tr key={index} style={{ fontSize: '13px' }}>
+                {/* Subtask Title */}
+                <td>
+                  <input
+                    type="text"
+                    placeholder="Subtask Title"
+                    value={subtask.title}
+                    onChange={(e) => handleSubtaskChange(index, 'title', e.target.value)}
+                    className={`form-control ${subtask.completed ? 'text-decoration-line-through' : ''}`}
+                    disabled={subtask.completed}
+                  />
+                </td>
+
+                {/* Assignees */}
+                <td>
+                      <select
+                        className="form-select"
+                        value={subtask.assignedTo || ''}
+                        onChange={(e) => handleSubtaskChange(index, 'assignedTo', e.target.value)}
+                        disabled={subtask.completed}
+                      >
+                        <option value="">Assign User</option>
+                        {boards
+                          .find(board => board._id === selectedBoardForTask)
+                          ?.users.map((user) => (
+                            <option key={user} value={user._id}>
+                              {user.username}
+                            </option>
+                          ))}
+                      </select>
+                    </td>
+                    {/* Priority */}
+                    <td>
+                      <select
+                        className="form-select"
+                        value={subtask.priority}
+                        onChange={(e) => handleSubtaskChange(index, 'priority', e.target.value)}
+                        disabled={subtask.completed}
+                      >
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                      </select>
+                    </td>
+
+               
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        ) : (
+          <p className="text-muted">No subtasks added yet.</p> 
+        )}
+
+        
+      </div>
+      </div>
+
+        
+
+        <div className="mb-3">
+          <strong>Priority</strong>
+          <select
+            className="form-select"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+          >
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        
+      </CModalBody>
+
+      <CModalFooter>
+        <CButton color="primary" onClick={handleEditTask} className="rounded-pill">
+          Save Changes
+        </CButton>
+        <CButton color="secondary" onClick={() => setEditTaskModalVisible(false)} className="rounded-pill">
+          Cancel
+        </CButton>
+      </CModalFooter>
+            </CCol>
+            
+  </CRow>  
+    </CModal>  
                <ToastContainer />
         </CCol>
       </>
