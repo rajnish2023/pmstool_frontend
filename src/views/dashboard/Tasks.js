@@ -87,8 +87,9 @@ const Tasks = () => {
    
        try {
          const updatedTask = await updateTaskAuth(token,editToTasks._id, updatedTaskData);
-        setEditTaskModalVisible(false);
-        setTasks((prevTasks) =>
+         setLoadingTask(true);
+         setEditTaskModalVisible(false);
+         setTasks((prevTasks) =>
           prevTasks.map((task) =>
             task._id === editToTasks._id ? updatedTask.data.task : task
           )
@@ -97,6 +98,9 @@ const Tasks = () => {
        } catch (error) {
          setError('Error editing task. Please try again later.');
          console.error('Error editing task', error);
+       }
+       finally{
+        setLoadingTask(false);
        }
      };
 
