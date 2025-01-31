@@ -409,7 +409,7 @@ const getUserInitials = (user) => {
             alert('Please enter a valid percentage (0-100)');
             return;
         }
-
+        setLoadingTask(true);
         try {
             const response = await updateSubTaskProgressAuth(token,selectedTaskId,selectedSubTaskId, subtaskprogress); // Update task progress
 
@@ -427,6 +427,9 @@ const getUserInitials = (user) => {
             }
         } catch (err) {
             console.error('Error updating task progress:', err);
+        }
+        finally{
+          setLoadingTask(false);
         }
     };
  
