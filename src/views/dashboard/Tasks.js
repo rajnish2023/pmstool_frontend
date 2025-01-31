@@ -566,6 +566,7 @@ const getUserInitials = (user) => {
                         {/* Only show the 'Update Progress' button if task status is 'in-progress' */}
                         {task.status === 'in-progress' && (
                             <CButton
+                                size="sm"
                                 color="primary"
                                 variant="outline"
                                 onClick={() => {
@@ -1025,6 +1026,7 @@ const getUserInitials = (user) => {
                         {/* Only show the 'Update Progress' button if task status is 'in-progress' */}
                         {task.status === 'in-progress' && (
                             <CButton
+                                size="sm"
                                 color="primary"
                                 variant="outline"
                                 onClick={() => {
