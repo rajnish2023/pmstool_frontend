@@ -136,6 +136,20 @@ const Tasks = () => {
             }
           };
 
+          const fetchUsers = async () => {
+            try {
+              const userData = await getUser();
+              if (Array.isArray(userData.data)) {
+                setUsers(userData.data);
+              } else {
+                setError('Unexpected data format. Users should be an array.');
+              }
+            } catch (error) {
+              setError('Error fetching users. Please try again later.');
+              console.error('Error fetching users', error);
+            }
+          };
+
           const getFileType = (fileName) => {
             const extension = fileName.split('.').pop().toLowerCase();
           
