@@ -553,13 +553,14 @@ const getUserInitials = (user) => {
                         {/* Show progress bar if task is in progress */}
                         {task.status === 'in-progress' && (
                             <>
+                            <span style={{color:"black",paddingRight:"10px"}}>{task.progress? task.progress : '0' }%</span>
                                 <CProgress
                                     value={task.progress || 0}
                                     color={getProgressBarColor(task.progress || 0)}
                                     className="me-2"
                                 >
                                     {/* Display percentage inside the progress bar */}
-                                    <span className="progress-bar-label">{task.progress || 0}%</span>
+                                    <span className="progress-bar-label"></span>
                                 </CProgress>
                             </>
                         )}
@@ -1012,14 +1013,14 @@ const getUserInitials = (user) => {
                         {/* Show progress bar if task is in progress */}
                         {task.status === 'in-progress' && (
                             <>
-                            
+                            <span style={{color:"black",paddingRight:"10px"}}>{subtask.progress? subtask.progress : '0' }%</span>
                                 <CProgress
                                     value={subtask.progress || 0}
                                     color={getProgressBarColor(subtask.progress || 0)}
                                     className="me-2"
                                 >
                                     {/* Display percentage inside the progress bar */}
-                                    <span className="progress-bar-label">{subtask.progress || 0}%</span>
+                                    <span className="progress-bar-label"></span>
                                 </CProgress>
                             </>
                         )}
