@@ -84,10 +84,9 @@ const Tasks = () => {
          priority,  
          subtasks                      
        };
-   
+       setLoadingTask(true);
        try {
          const updatedTask = await updateTaskAuth(token,editToTasks._id, updatedTaskData);
-         setLoadingTask(true);
          setEditTaskModalVisible(false);
          setTasks((prevTasks) =>
           prevTasks.map((task) =>
