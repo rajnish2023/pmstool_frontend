@@ -44,6 +44,7 @@ const Tasks = () => {
      const [priority, setPriority] = useState('medium');
      const [selectedAssignees, setSelectedAssignees] = useState([]);
      const [selectedBoardForTask, setSelectedBoardForTask] = useState(null);
+     const [dueDate, setDueDate] = useState('');
 
 
      const handleAddSubtask = () => {
