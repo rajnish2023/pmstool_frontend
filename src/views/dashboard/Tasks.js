@@ -517,7 +517,7 @@ const getUserInitials = (user) => {
             {status !== 'in-progress' && status !== 'completed' && status !== 'pending' && 'Your All Tasks'}
         </strong>
                     </div>
-                    {status === 'pending' &  <CButton color="primary" className="me-3" onClick={openCreateTaskModal}>
+                    {status === 'pending' &&  <CButton color="primary" className="me-3" onClick={openCreateTaskModal}>
                         <FaPlus /> Create Task
                     </CButton> }
                 </CCardHeader>
@@ -1241,6 +1241,17 @@ const getUserInitials = (user) => {
                           ))}
                       </select>
                     </td>
+                     {/* Due Date */}
+                     <td>
+                                          <CFormInput
+                                            type="datetime-local"
+                                            value={subtask.dueDate ? new Date(subtask.dueDate).toISOString().slice(0, 16) : ''}
+                                            onChange={(e) => handleSubtaskChange(index, 'dueDate', e.target.value)}
+                                            disabled={subtask.completed}
+                                            min={new Date().toISOString().slice(0, 16)}
+                                          />
+                                        </td>
+
                     {/* Priority */}
                     <td>
                       <select
