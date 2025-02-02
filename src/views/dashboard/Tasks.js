@@ -517,9 +517,9 @@ const getUserInitials = (user) => {
             {status !== 'in-progress' && status !== 'completed' && status !== 'pending' && 'Your All Tasks'}
         </strong>
                     </div>
-                    <CButton color="primary" className="me-3" onClick={openCreateTaskModal}>
+                    {status === 'pending' &  <CButton color="primary" className="me-3" onClick={openCreateTaskModal}>
                         <FaPlus /> Create Task
-                    </CButton>
+                    </CButton> }
                 </CCardHeader>
                 <CCardBody>
                     <div className="mt-3">
@@ -1227,7 +1227,7 @@ const getUserInitials = (user) => {
                 <td>
                       <select
                         className="form-select"
-                        value={subtask.assignedTo || ''}
+                        value={subtask.assignedTo._id || ''}
                         onChange={(e) => handleSubtaskChange(index, 'assignedTo', e.target.value)}
                         disabled={subtask.completed}
                       >
@@ -1263,7 +1263,14 @@ const getUserInitials = (user) => {
         ) : (
           <p className="text-muted">No subtasks added yet.</p> 
         )}
-
+      {/* Add new subtask */}
+              <button
+                  type="button"
+                  className="btn btn-link p-0 mt-3"
+                  onClick={handleAddSubtask}
+                >
+                  <FaPlusCircle /> Add Subtask
+                </button>
         
       </div>
       </div>
