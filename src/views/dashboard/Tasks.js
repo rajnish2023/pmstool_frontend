@@ -6,6 +6,7 @@ import './dashboard.css';
 import { getTasksByStatusAuth, updateTaskStatusAuth, updateTaskProgressAuth,updateSubTaskProgressAuth,getUserProfile,sendtaskactivity,gettaskactivity,getBoards,getUser,updateTaskAuth,getTaskDetials } from '../../api/api';  // Import API functions
 import CreateTaskModal from './StaffCreateTask';
 import { io } from 'socket.io-client';
+import moment from 'moment';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -1143,7 +1144,7 @@ const getUserInitials = (user) => {
              {/* Edit Task Modal */}
              <CModal visible={editTaskModalVisible} onClose={() => setEditTaskModalVisible(false)} className="rounded-3" backdrop="static" size="xl">
           <CModalHeader className="border-0">
-          <CModalTitle>Edit Task</CModalTitle>
+          <CModalTitle>Task Due Date: {moment(dueDate).format('DD MMM YYYY')} </CModalTitle>
           </CModalHeader>
           <CRow>
             <CCol xs={12}>
