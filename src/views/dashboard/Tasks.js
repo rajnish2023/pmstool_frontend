@@ -342,6 +342,7 @@ const getUserInitials = (user) => {
 
     useEffect(() => {
         const fetchTasks = async () => {
+          setLoadingTask(true);
             try {
                 if (!token) {
                     throw new Error('Authentication token is missing.');
@@ -358,6 +359,7 @@ const getUserInitials = (user) => {
                 console.error('Error fetching tasks:', err);
             } finally {
                 setLoading(false);  
+                setLoadingTask(false);
             }
         };
  
