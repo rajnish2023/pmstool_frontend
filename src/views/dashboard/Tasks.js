@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { CCard, CCardBody, CCardHeader, CCol, CButton, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle,CRow , CModal,CModalTitle , CModalHeader, CModalBody, CModalFooter, CFormInput, CProgress, CSpinner,CAvatar } from '@coreui/react';
 import {FaPlus ,FaComments,FaTimes,FaPaperclip,FaPaperPlane,FaFileAlt,FaDownload,FaEye} from 'react-icons/fa';
 import './dashboard.css';
-import { getTasksByStatusAuth, updateTaskStatusAuth, updateTaskProgressAuth,updateSubTaskProgressAuth,getUserProfile,sendtaskactivity,gettaskactivity,getBoards,getUser,updateTaskAuth } from '../../api/api';  // Import API functions
+import { getTasksByStatusAuth, updateTaskStatusAuth, updateTaskProgressAuth,updateSubTaskProgressAuth,getUserProfile,sendtaskactivity,gettaskactivity,getBoards,getUser,updateTaskAuth,getTaskDetials } from '../../api/api';  // Import API functions
 import CreateTaskModal from './StaffCreateTask';
 import { io } from 'socket.io-client';
 
@@ -287,20 +287,47 @@ const handleTaskUserSelection = (user) => {
     : [...selectedAssignees, user._id];
   setSelectedAssignees(updatedAssignees);
 };
-const handleEditTaskClick = (task) => {
-  seteditToTask(task);
-  setSelectedBoardForTask(task.board._id);
-  setNewTaskTitle(task.title);
-  setTaskDescription(task.description);
-  setEditTaskModalVisible(true);
-   setNewTaskTitle(task.title);
-   setTaskDescription(task.description);
-   setPriority(task.priority);
-   setSelectedAssignees(task.assignees);
-   setEditTaskModalVisible(true);
-   setSubtasks(task.subtasks || []);
+// const handleEditTaskClick = (task) => {
+//   seteditToTask(task);
+//   setSelectedBoardForTask(task.board._id);
+//   setNewTaskTitle(task.title);
+//   setTaskDescription(task.description);
+//   setEditTaskModalVisible(true);
+//    setNewTaskTitle(task.title);
+//    setTaskDescription(task.description);
+//    setPriority(task.priority);
+//    setSelectedAssignees(task.assignees);
+//    setEditTaskModalVisible(true);
+//    setSubtasks(task.subtasks || []);
    
+// };
+
+const handleEditTaskClick = async (taskId) => {
+    
+  setLoadingTask(true); 
+
+  try {
+     
+      const response = await getTaskDetials(token, taskId);
+      console.log(response);
+      const task = response.data;
+      seteditToTask(task);
+      setSelectedBoardForTask(task.board._id);
+      setNewTaskTitle(task.title);
+      setTaskDescription(task.description);
+      setPriority(task.priority);
+      setSelectedAssignees(task.assignees);
+      setDueDate(task.dueDate || '');
+      setSubtasks(task.subtasks || []);
+      setEditTaskModalVisible(true);
+  } catch (error) {
+      console.error("Error fetching task details:", error);
+      
+  } finally {
+    setLoadingTask(false);  
+  }
 };
+
 const getUserInitials = (user) => {
   return user.username
     .split(' ')
@@ -627,7 +654,7 @@ const getUserInitials = (user) => {
                                                         
                                                         <FaComments  /> Comments
                                                          </CButton>
-                                                         <CButton size="sm" color="warning" variant="outline" onClick={() => handleEditTaskClick(task)}>
+                                                         <CButton size="sm" color="warning" variant="outline" onClick={() => handleEditTaskClick(task._id)}>
                                                         <FaEye  /> View Task
                                                          </CButton>
                                                          {openChats[task._id] && (

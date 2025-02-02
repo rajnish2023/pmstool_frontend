@@ -242,6 +242,24 @@ export const getTasksAuth = async (token, boardId) => {
 }
 
 
+// getTask details with authuser token and taskId
+
+export const getTaskDetials = async (token,taskId) => {
+  try{
+    const response = API.get(`/authBoard/authgetTaskDetails/${taskId}`,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    return response;
+  }
+  catch(error){
+    console.error('Error geting task details', error);
+    throw error;
+  }
+}
+
+
 // update task by authuser token with task id
 
 export const updateTaskAuth = async (token, taskId, taskData) => {
