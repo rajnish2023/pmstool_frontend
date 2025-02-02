@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { CCard, CCardBody, CCardHeader, CCol, CButton, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle,CRow , CModal,CModalTitle , CModalHeader, CModalBody, CModalFooter, CFormInput, CProgress, CSpinner,CAvatar } from '@coreui/react';
-import {FaPlus ,FaComments,FaTimes,FaPaperclip,FaPaperPlane,FaFileAlt,FaDownload,FaEye} from 'react-icons/fa';
+import {FaPlus ,FaComments,FaTimes,FaPaperclip,FaPaperPlane,FaFileAlt,FaDownload,FaEye,FaPlusCircle} from 'react-icons/fa';
 import './dashboard.css';
 import { getTasksByStatusAuth, updateTaskStatusAuth, updateTaskProgressAuth,updateSubTaskProgressAuth,getUserProfile,sendtaskactivity,gettaskactivity,getBoards,getUser,updateTaskAuth,getTaskDetials } from '../../api/api';  // Import API functions
 import CreateTaskModal from './StaffCreateTask';
