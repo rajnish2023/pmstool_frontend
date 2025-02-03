@@ -43,6 +43,7 @@ const Dashboard = () => {
   const [messageContent, setMessageContent] = useState('');
   const [files, setFiles] = useState([]);
   const [filePreview, setFilePreview] = useState(null);
+  const [loadingtask, setLoadingTask] = useState(false);
 
 
   const socket = io('https://pmstoolbackend.onrender.com'); 
@@ -268,6 +269,7 @@ setFilePreview({ type: 'document', name: file.name, url: URL.createObjectURL(fil
 
   // Create board
   const handleCreateBoard = async () => {
+    setLoadingTask(true);
     try {
       const newBoardData = await createBoardAuth(token, {
         title: newBoardTitle,
@@ -296,10 +298,14 @@ setFilePreview({ type: 'document', name: file.name, url: URL.createObjectURL(fil
       setError('Error creating board. Please try again later.');
       console.error('Error creating board', error);
     }
+    finally{
+      setLoadingTask(false);
+    }
   };
 
   // Update board (edit)
   const handleEditBoard = async () => {
+    setLoadingTask(true);
     try {
       if (!editingBoard) return; // Ensure a board is selected for editing
 
@@ -334,6 +340,9 @@ setFilePreview({ type: 'document', name: file.name, url: URL.createObjectURL(fil
       setError('Error updating board. Please try again later.');
       console.error('Error updating board', error);
     }
+    finally{
+      setLoadingTask(false);
+    }
   };
 
    const fetchTasksForBoard = async (boardId) => {
@@ -360,7 +369,7 @@ setFilePreview({ type: 'document', name: file.name, url: URL.createObjectURL(fil
         dueDate,                         
         priority,                        
       };
-    
+      setLoadingTask(true);
       try {
         
         const task = await createTaskAuth(token,selectedBoardForTask, taskData);
@@ -386,6 +395,9 @@ setFilePreview({ type: 'document', name: file.name, url: URL.createObjectURL(fil
       } catch (error) {
         setError('Error creating task. Please try again later.');
         console.error('Error creating task', error);
+      }
+      finally{
+        setLoadingTask(false);
       }
     };
 
@@ -431,7 +443,7 @@ const handleEditTask = async () => {
       TaskStatus,  
       subtasks                      
     };
-
+    setLoadingTask(true);
     try {
       const updatedTask = await updateTaskAuth(token,taskToEdit._id, updatedTaskData);
        
@@ -453,6 +465,9 @@ const handleEditTask = async () => {
     } catch (error) {
       setError('Error editing task. Please try again later.');
       console.error('Error editing task', error);
+    }
+    finally{
+      setLoadingTask(false);
     }
   };
 
@@ -512,7 +527,16 @@ const handleEditTask = async () => {
   };
 
   return (
-    <CRow>
+  <>
+  {loadingtask && (
+                        <div className="loading-overlay">
+                            <div className="loading-content">
+                                <CSpinner color="primary" size="lg" />
+                                <p>Please wait, your request is processing...</p>
+                            </div>
+                        </div>
+                    )}
+  <CRow>
       <CCol xs={12}>
         <CCard className="mb-4" style={{ border: '1px solid #ddd', borderRadius: '10px' }}>
           <CCardHeader className="d-flex justify-content-between align-items-center border-0" style={{ backgroundColor: '#f8f9fa' }}>
@@ -1334,6 +1358,8 @@ const handleEditTask = async () => {
       {/* Toastr Notifications */}
       {toastr}
     </CRow>
+  </>
+    
   );
 };
 
