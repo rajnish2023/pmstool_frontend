@@ -154,7 +154,7 @@ const Login = () => {
                       </CCol>
                     </CRow>
 
-                    {/* <CRow className="mt-4">
+                    <CRow className="mt-4">
                       <CCol xs={12} className="text-center">
                         <Link to="/forgot-password">
                           <CButton color="link" className="px-0 text-muted">
@@ -162,7 +162,7 @@ const Login = () => {
                           </CButton>
                         </Link>
                       </CCol>
-                    </CRow> */}
+                    </CRow>
                   </CForm>
                 </CCardBody>
               </CCard>
