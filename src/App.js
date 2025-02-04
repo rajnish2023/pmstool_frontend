@@ -14,6 +14,7 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 // Pages
 const Login = React.lazy(() => import('./views/pages/user/Login'))
 const ForgotPassword = React.lazy(() => import('./views/pages/user/ForgotPassword')) 
+const ResetPassword = React.lazy(() => import('./views/pages/user/ResetPassword'));
 
 const page404 = React.lazy(() => import('./views/pages/page404/Page404'))   
 
@@ -47,6 +48,7 @@ const App = () => {
         <Routes>
           <Route exact path="/login" name="Login Page" element={<Login />} />
           <Route exact path="/forgot-password" name="Forgot Password Page" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" name="Reset Password" element={<ResetPassword />} />
           <Route path="*" name="Home" element={<DefaultLayout />} />
         </Routes>
       </Suspense>
