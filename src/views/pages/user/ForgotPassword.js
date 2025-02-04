@@ -28,6 +28,7 @@ const ForgotPassword = () => {
   const handleEmailChange = (e) => setEmail(e.target.value);
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
 
     try {
@@ -37,6 +38,9 @@ const ForgotPassword = () => {
     } catch (err) {
       setError(err.response?.data?.message || 'Error occurred');
       setMessage('');
+    }
+    finally{
+      setLoading(false);
     }
   };
 
