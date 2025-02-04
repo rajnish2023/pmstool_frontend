@@ -11,16 +11,19 @@ import {
   CFormInput, 
   CInputGroup, 
   CInputGroupText, 
-  CRow 
+  CRow,
+  CSpinner
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cibGmail } from '@coreui/icons';
 import { forgotPassword } from '../../../api/api';
+import './userstyle.css';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleEmailChange = (e) => setEmail(e.target.value);
 
@@ -38,6 +41,15 @@ const ForgotPassword = () => {
   };
 
   return (
+    <>
+     {loading && (
+                        <div className="loading-overlay">
+                            <div className="loading-content">
+                                <CSpinner color="primary" size="lg" />
+                                <p>Please wait, Sending reset password link...</p>
+                            </div>
+                        </div>
+                    )}
     <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light-gradient">
       <CContainer>
         <CRow className="justify-content-center">
@@ -101,6 +113,8 @@ const ForgotPassword = () => {
         </CRow>
       </CContainer>
     </div>
+    </>
+    
   );
 };
 
