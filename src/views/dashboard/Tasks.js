@@ -48,6 +48,15 @@ const Tasks = () => {
      const [dueDate, setDueDate] = useState('');
 
 
+
+     const calculateTaskProgress = (task) => {
+      const totalSubtasks = task.subtasks.length;
+      if (totalSubtasks === 0) return task.progress || 0;  
+
+      const totalProgress = task.subtasks.reduce((sum, subtask) => sum + subtask.progress, 0);
+      return totalProgress / totalSubtasks;  
+  };
+
      const handleAddSubtask = () => {
       setSubtasks([
         ...subtasks,
@@ -447,14 +456,15 @@ const getUserInitials = (user) => {
 
             if (response && response.data.task) {
                 // Update the subtask progress locally without re-fetching
-                setTasks(prevTasks => prevTasks.map(task =>
-                    task._id === selectedTaskId ? {
-                        ...task,
-                        subtasks: task.subtasks.map(subtask =>
-                            subtask._id === selectedSubTaskId ? { ...subtask, progress: subtaskprogress } : subtask
-                        )
-                    } : task
-                ));
+                setTasks(prevTasks => prevTasks.map(task => {
+                  if (task._id === selectedTaskId) {
+                    const updatedSubtasks = task.subtasks.map(subtask =>
+                      subtask._id === selectedSubTaskId ? { ...subtask, progress: subtaskprogress } : subtask
+                    );
+                    return { ...task, subtasks: updatedSubtasks, progress: response.data.task.progress };
+                  }
+                  return task;
+                }));
                 setShowSubtaskProgressModal(false); // Close the modal after update
             }
         } catch (err) {
