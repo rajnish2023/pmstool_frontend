@@ -72,7 +72,8 @@ const Tasks = () => {
         }
       }
       const updatedSubtasks = [...subtasks];
-      updatedSubtasks[index][field] = value;
+      // updatedSubtasks[index][field] = value;
+      updatedSubtasks[index][field] = field === 'assignedTo' ? { _id: value } : value;
       setSubtasks(updatedSubtasks);
     };
 
