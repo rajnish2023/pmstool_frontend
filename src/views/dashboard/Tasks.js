@@ -607,11 +607,12 @@ const getUserInitials = (user) => {
                             </>
                         )}
                         {/* Only show the 'Update Progress' button if task status is 'in-progress' */}
-                        {task.status === 'in-progress' && (
+                        {!task.subtasks || task.subtasks.length === 0 ? (
+                          task.status === 'in-progress' && (
                             <CButton
                                 size="sm"
                                 color="primary"
-                                variant="outline"
+                                 variant="outline"
                                 onClick={() => {
                                     setSelectedTaskId(task._id);
                                     setProgress(task.progress || 0);
@@ -620,7 +621,8 @@ const getUserInitials = (user) => {
                             >
                                 Update Progress
                             </CButton>
-                        )}
+                           )
+                          ) : null}
                         {task.status !== 'in-progress' && (
                             <span className={`badge ${task.status === 'completed' ? 'bg-success' : 'bg-danger'}`}>
                                 {task.status}
