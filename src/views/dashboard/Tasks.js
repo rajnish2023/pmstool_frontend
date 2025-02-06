@@ -1035,9 +1035,12 @@ const getUserInitials = (user) => {
                             </span>
                         </td>
                         <td>
-                            {subtask.dueDate
+                            {/* {subtask.dueDate
                                 ? new Date(subtask.dueDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-                                : 'Not Set'}
+                                : 'Not Set'} */}
+                            {subtask.dueDate
+                ? new Date(subtask.dueDate).toISOString().split('T')[0]
+                : 'Not Set'}   
                         </td>
                         <td>
                             <span
