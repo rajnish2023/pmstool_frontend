@@ -305,7 +305,7 @@ const AllUsers = () => {
                   { label: 'PPC', value: '5' },
                   { label: 'Seo Executive', value: '6' },
                   { label: 'Social Media', value: '7' },
-                  { lable: 'Sales Executive', value: '8'},
+                  { label: 'Sales Executive', value: '8'},
                   { label: 'Sales Manager', value: '9'},
                   { label: 'Digital Marketing Manager' , value: '10'},
                   { label: 'UI Designer' , value: '11'}
@@ -407,7 +407,7 @@ const AllUsers = () => {
                   { label: 'PPC', value: '5' },
                   { label: 'Seo Executive', value: '6' },
                   { label: 'Social Media', value: '7' },
-                  { lable: 'Sales Executive', value: '8'},
+                  { label: 'Sales Executive', value: '8'},
                   { label: 'Sales Manager', value: '9'},
                   { label: 'Digital Marketing Manager' , value: '10'},
                   { label: 'UI Designer' , value: '11'}
