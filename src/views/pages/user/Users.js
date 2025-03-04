@@ -42,6 +42,7 @@ const AllUsers = () => {
     password: '',
     repeatPassword: '',
     role: '',
+    department: '',
   });
   const [searchTerm, setSearchTerm] = useState('');
   const token = localStorage.getItem('token');
@@ -79,6 +80,7 @@ const AllUsers = () => {
       password: '',
       repeatPassword: '',
       role: '',
+      department: '',
     });
   };
 
@@ -105,6 +107,7 @@ const AllUsers = () => {
         email: newUser.email,
         password: newUser.password,
         role: newUser.role,
+        department: newUser.department,
       });
 
       setUsers([...users, { ...newUser, _id: new Date().getTime().toString() }]); // Simulate the new user
@@ -290,6 +293,24 @@ const AllUsers = () => {
               />
             </CInputGroup>
             <CInputGroup className="mb-3">
+              <CInputGroupText><CIcon icon={cilUser} /></CInputGroupText>
+              <CFormSelect
+                name="department"
+                options={[
+                  'Select Department',
+                  { label: 'Content Writer', value: '1' },
+                  { label: 'Seo Executive', value: '2' },
+                  { label: 'developer', value: '3' },
+                  { label: 'Graphic Designer', value: '4' },
+                  { label: 'PPC', value: '5'},
+                  { label:'Social Media', value: '6'},
+                ]}
+                value={newUser.department}
+                onChange={(e) => setNewUser({ ...newUser, department: e.target.value })}
+                style={{ borderRadius: '10px', padding: '10px' }}
+              />
+            </CInputGroup>
+            <CInputGroup className="mb-3">
               <CInputGroupText><CIcon icon={cilLockLocked} /></CInputGroupText>
               <CFormInput
                 type="password"
@@ -368,6 +389,26 @@ const AllUsers = () => {
                   style={{ borderRadius: '10px', padding: '10px' }}
                 />
               </CInputGroup>
+              <CInputGroup className="mb-3">
+              <CInputGroupText><CIcon icon={cilUser} /></CInputGroupText>
+              <CFormSelect
+                name="department"
+                options={[
+                  'Select Department',
+                  { label: 'Content Writer', value: '1' },
+                  { label: 'Data Entry', value: '2' },
+                  { label: 'Developer', value: '3' },
+                  { label: 'Graphic Designer', value: '4' },
+                  { label: 'PPC', value: '5' },
+                  { label: 'Seo Executive', value: '6' },
+                  { label: 'Social Media', value: '7' },
+                ]}
+              
+                value={currentUser.department}
+                onChange={(e) => setCurrentUser({ ...currentUser, department: e.target.value })}
+                style={{ borderRadius: '10px', padding: '10px' }}
+              />
+            </CInputGroup>
               <div className="d-grid mb-3">
                 <CButton color="primary" type="submit" style={{ borderRadius: '20px' }}>
                   Update User
