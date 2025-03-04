@@ -299,11 +299,16 @@ const AllUsers = () => {
                 options={[
                   'Select Department',
                   { label: 'Content Writer', value: '1' },
-                  { label: 'Seo Executive', value: '2' },
-                  { label: 'developer', value: '3' },
+                  { label: 'Data Entry', value: '2' },
+                  { label: 'Developer', value: '3' },
                   { label: 'Graphic Designer', value: '4' },
-                  { label: 'PPC', value: '5'},
-                  { label:'Social Media', value: '6'},
+                  { label: 'PPC', value: '5' },
+                  { label: 'Seo Executive', value: '6' },
+                  { label: 'Social Media', value: '7' },
+                  { lable: 'Sales Executive', value: '8'},
+                  { label: 'Sales Manager', value: '9'},
+                  { label: 'Digital Marketing Manager' , value: '10'},
+                  { label: 'UI Designer' , value: '11'}
                 ]}
                 value={newUser.department}
                 onChange={(e) => setNewUser({ ...newUser, department: e.target.value })}
@@ -402,6 +407,10 @@ const AllUsers = () => {
                   { label: 'PPC', value: '5' },
                   { label: 'Seo Executive', value: '6' },
                   { label: 'Social Media', value: '7' },
+                  { lable: 'Sales Executive', value: '8'},
+                  { label: 'Sales Manager', value: '9'},
+                  { label: 'Digital Marketing Manager' , value: '10'},
+                  { label: 'UI Designer' , value: '11'}
                 ]}
               
                 value={currentUser.department}
