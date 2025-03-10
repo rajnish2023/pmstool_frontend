@@ -46,6 +46,8 @@ const Tasks = () => {
      const [selectedAssignees, setSelectedAssignees] = useState([]);
      const [selectedBoardForTask, setSelectedBoardForTask] = useState(null);
      const [dueDate, setDueDate] = useState('');
+     const [taskComment, setTaskComments] = useState([]);
+     const [subtaskComment, setSubTaskComments] = useState([])
 
 
 
@@ -422,12 +424,40 @@ const getUserInitials = (user) => {
     // Function to handle progress update
     const handleProgressChange = async () => {
         if (progress < 0 || progress > 100) {
+        
             alert('Please enter a valid percentage (0-100)');
             return;
         }
+         
+        if (userDetails.department === '3' && subtaskComment === "") {
+          alert('Please enter a valid word count for the subtask');
+          return;
+        }
+        
+        if (userDetails.department === '3' && subtaskComment < 0) {
+          alert('Word count must be greater than 0 or equal to 0');
+          return;
+        }
+        
+        if (userDetails.department === '2' && subtaskComment === "") {
+          alert('Please enter a valid product count for the subtask');
+          return;
+        }
+        
+        if (userDetails.department === '2' && subtaskComment < 0) {
+          alert('Product count must be greater than or equal to 0');
+          return;
+        }
+ 
+      const progressData = {
+        progress,
+        taskComment
+      };
+
+
         setLoadingTask(true)
         try {
-            const response = await updateTaskProgressAuth(token, selectedTaskId, progress); // Update task progress
+            const response = await updateTaskProgressAuth(token, selectedTaskId, progressData); // Update task progress
             if (response && response.data) {
                 // Update the task progress locally without re-fetching
                 setTasks(prevTasks => prevTasks.map(task =>
@@ -450,9 +480,33 @@ const getUserInitials = (user) => {
             alert('Please enter a valid percentage (0-100)');
             return;
         }
+        if (userDetails.department === '3' && subtaskComment === "") {
+          alert('Please enter a valid word count for the subtask');
+          return;
+        }
+        
+        if (userDetails.department === '3' && subtaskComment < 0) {
+          alert('Word count must be greater than 0 or equal to 0');
+          return;
+        }
+        
+        if (userDetails.department === '2' && subtaskComment === "") {
+          alert('Please enter a valid product count for the subtask');
+          return;
+        }
+        
+        if (userDetails.department === '2' && subtaskComment < 0) {
+          alert('Product count must be greater than or equal to 0');
+          return;
+        }
+        const subtaskprogressData = {
+          subtaskprogress,
+          subtaskComment
+        };
+  
         setLoadingTask(true);
         try {
-            const response = await updateSubTaskProgressAuth(token,selectedTaskId,selectedSubTaskId, subtaskprogress); // Update task progress
+            const response = await updateSubTaskProgressAuth(token,selectedTaskId,selectedSubTaskId, subtaskprogressData); // Update task progress
 
             if (response && response.data.task) {
                 // Update the subtask progress locally without re-fetching
@@ -616,6 +670,7 @@ const getUserInitials = (user) => {
                                 onClick={() => {
                                     setSelectedTaskId(task._id);
                                     setProgress(task.progress || 0);
+                                    setTaskComments(task.taskcomment || 0);
                                     setShowProgressModal(true);
                                 }}
                             >
@@ -1081,6 +1136,7 @@ const getUserInitials = (user) => {
                                     setSelectedTaskId(task._id);
                                     setSelectedSubTaskId(subtask._id);
                                     setSubtaskProgress(subtask.progress || 0);
+                                    setSubTaskComments(subtask.subtaskcomment || 0);
                                     setShowSubtaskProgressModal(true);
                                 }}
                             >
@@ -1121,6 +1177,34 @@ const getUserInitials = (user) => {
                         onChange={(e) => setProgress(e.target.value)}
                         label="Enter Progress Percentage"
                     />
+                    {/* show department based input fields  */}
+                  {userDetails.department === '3' && (
+                    <>
+                    <CFormInput
+                    type='number'
+                    value={taskComment || 0 }
+                    onChange={(e) => setTaskComments(e.target.value)}
+                    label="Word Count"
+                    className='mb-2'
+                    placeholder='Enter Word Count'
+                    required={true}
+                    />
+                    </>
+                  )}
+
+                  {userDetails.department==='1' && (
+                    <>
+                    <CFormInput
+                    type='number'
+                    value={taskComment || 0}
+                    onChange={(e) => setTaskComments(e.target.value)}
+                    label="Poduct Count"
+                     className='mb-2'
+                     placeholder='Enter Product Count'
+                     required
+                    />
+                    </>
+                  )}
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="secondary" onClick={() => setShowProgressModal(false)}>
@@ -1144,6 +1228,35 @@ const getUserInitials = (user) => {
                         onChange={(e) => setSubtaskProgress(e.target.value)}
                         label="Enter Progress Percentage"
                     />
+                     {/* show department based input fields  */}
+                  {userDetails.department === '3' && (
+                    <>
+                    <CFormInput
+                    type='number'
+                    value={subtaskComment}
+                    onChange={(e) => setSubTaskComments(e.target.value)}
+                    label="Word Count"
+                    className='mb-2'
+                    placeholder='Enter Word Count'
+                    required={true}
+                    />
+                    </>
+                  )}
+
+                  {userDetails.department==='2' && (
+                    <>
+                    <CFormInput
+                    type='number'
+                    value={subtaskComment}
+                    onChange={(e) => setSubTaskComments(e.target.value)}
+                    label="Poduct Count"
+                     className='mb-2'
+                     placeholder='Enter Product Count'
+                     required
+                    />
+                    </>
+                  )}
+
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="secondary" onClick={() => setShowSubtaskProgressModal(false)}>
