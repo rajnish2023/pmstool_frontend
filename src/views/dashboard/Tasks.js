@@ -1178,7 +1178,7 @@ const getUserInitials = (user) => {
                         label="Enter Progress Percentage"
                     />
                     {/* show department based input fields  */}
-                  {userDetails.department === '3' && (
+                  {userDetails.department === '1' && (
                     <>
                     <CFormInput
                     type='number'
@@ -1229,7 +1229,7 @@ const getUserInitials = (user) => {
                         label="Enter Progress Percentage"
                     />
                      {/* show department based input fields  */}
-                  {userDetails.department === '3' && (
+                  {userDetails.department === '1' && (
                     <>
                     <CFormInput
                     type='number'
