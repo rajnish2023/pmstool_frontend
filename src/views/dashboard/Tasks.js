@@ -1192,13 +1192,13 @@ const getUserInitials = (user) => {
                     </>
                   )}
 
-                  {userDetails.department==='1' && (
+                  {userDetails.department==='2' && (
                     <>
                     <CFormInput
                     type='number'
                     value={taskComment || 0}
                     onChange={(e) => setTaskComments(e.target.value)}
-                    label="Poduct Count"
+                    label="Product Count"
                      className='mb-2'
                      placeholder='Enter Product Count'
                      required
@@ -1249,7 +1249,7 @@ const getUserInitials = (user) => {
                     type='number'
                     value={subtaskComment}
                     onChange={(e) => setSubTaskComments(e.target.value)}
-                    label="Poduct Count"
+                    label="Product Count"
                      className='mb-2'
                      placeholder='Enter Product Count'
                      required
