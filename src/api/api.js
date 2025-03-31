@@ -505,6 +505,19 @@ export const updateSubTaskProgressAuth = async (token, taskId, subTaskId, subtas
 };
 
 
+//get activity task status
+
+export const getTaskswithUserId = async (userId) => {
+  try{
+    const response  = API.get(`/auth/gettaskswithuserid/${userId}`)
+    return response;
+  }
+  catch (error){
+    console.error('Tasks of userid not found', error);
+  }
+}
+
+
 
 
 

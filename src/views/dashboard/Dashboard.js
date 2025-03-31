@@ -544,9 +544,7 @@ const handleEditTask = async () => {
               <strong className="fs-4">Projects</strong>
             </div>
             <div className="d-flex align-items-center">
-              {/* <CButton color="warning" className="me-3" variant="outline"><Link to="/today-tasks" style={{ textDecoration: 'none' }}>
-  Today Tasks
-</Link></CButton> */}
+            <a href="/reports" color="primary"><CButton color="warning" className="me-3">View Reports</CButton></a>
               {(userDetails.role === '2') && (
                 <CButton
                   color="primary"
