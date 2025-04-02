@@ -87,3 +87,48 @@
     font-size: 18px;
     font-weight: bold;
 }
+
+.react-datepicker-wrapper{
+    width: 100%;
+  }
+
+
+  .user-details {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .word-count {
+    background-color: #f0f8ff;
+    padding: 15px 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .word-count h6 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    color: #222;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .word-count p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #444;
+  }
+  
+  .word-count .current-count {
+    color: #007bff;
+  }
+  
+  .word-count .max-count {
+    color: #ff4500;
+  }

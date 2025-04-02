@@ -6,7 +6,7 @@ import {
   CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter,
   CFormInput, CInputGroup, CAvatar, CToast,CSpinner
 } from '@coreui/react';
-import { FaPencilAlt, FaPlusCircle, FaTimes ,FaEye,FaTrashAlt,FaPaperclip,FaBell,FaFilter,FaPaperPlane ,FaThumbsUp,FaFileAlt ,FaDownload } from 'react-icons/fa';
+import { FaPencilAlt, FaPlusCircle, FaTimes ,FaEye,FaTrashAlt,FaPaperclip,FaBell,FaFilter,FaPaperPlane ,FaThumbsUp,FaFileAlt ,FaDownload,FaGolfBall } from 'react-icons/fa';
 import { io } from 'socket.io-client';
 
 import './dashboard.css';
@@ -544,6 +544,7 @@ const handleEditTask = async () => {
               <strong className="fs-4">Projects</strong>
             </div>
             <div className="d-flex align-items-center">
+            <a href="/goals" color="primary"><CButton color="info" className="me-3" variant="outline"><FaGolfBall/> Goals</CButton></a>
             <a href="/reports" color="primary"><CButton color="warning" className="me-3">View Reports</CButton></a>
               {(userDetails.role === '2') && (
                 <CButton

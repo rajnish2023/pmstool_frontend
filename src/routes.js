@@ -18,6 +18,9 @@ const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 //Report Page
 const Report = React.lazy(() => import('./views/dashboard/Reports'))
 
+//Target Page
+const Goal = React.lazy(() => import('./views/dashboard/Goals'));
+
 import PrivateRoute from './PrivateRoute';
 
 const routes = [
@@ -32,6 +35,7 @@ const routes = [
   { path: '/tasks/:status', name: 'View All Tasks by Status', element: <PrivateRoute element={Tasks} allowedRoles={['2','3']} /> },
 
   { path: '/reports', name: 'Reports', element: <PrivateRoute element={Report} allowedRoles={['2']} /> },
+  { path: '/goals', name: 'Goals', element: <PrivateRoute element={Goal} allowedRoles={['2']} /> },
     
 ]
 

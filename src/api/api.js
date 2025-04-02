@@ -518,6 +518,72 @@ export const getTaskswithUserId = async (userId) => {
 }
 
 
+//get all goals
+
+// export const getGoals  = async() => {
+//   try{
+//     const response = API.get('/goal/goals');
+//     return response;
+//   }
+//   catch(error){
+//     console.error("Goals List not found", error);
+//   }
+// }
+
+export const getGoals = async (month) => {
+  try {
+    const formattedMonth = month ? `${month.getFullYear()}-${(month.getMonth() + 1).toString().padStart(2, '0')}` : null;
+    const response = await API.get('/goal/goals', {
+      params: {
+        targetDate: formattedMonth, 
+      }
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Goals List not found", error);
+    throw error; 
+  }
+};
+
+//create goal
+
+export const CreateGoal = async(data) => {
+  try{
+    const response = API.post('/goal/creategoal',data);
+    return response;
+  }
+  catch(error){
+    console.error("Goal creation faild",error);
+  }
+
+}
+
+//update goal
+
+export const updateGoal = async (data) => {
+  try{
+    const response = API.post('/goal/updategoal',data);
+    return response;
+  }
+  catch(error){
+    console.error("Goal Updation faild",error);
+  }
+}
+
+
+//fetch remaingtasks value
+
+export const remainingtasksvalue = async (userId) => {
+  try{
+    const response = API.get(`/goal/remainingtasks/${userId}`);
+    return response;
+  }
+  catch(error){
+    console.error("Remaingtask value not showing", error);
+  }
+}
+
 
 
 

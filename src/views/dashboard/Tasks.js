@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { CCard, CCardBody, CCardHeader, CCol, CButton, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle,CRow , CModal,CModalTitle , CModalHeader, CModalBody, CModalFooter, CFormInput, CProgress, CSpinner,CAvatar } from '@coreui/react';
 import {FaPlus ,FaComments,FaTimes,FaPaperclip,FaPaperPlane,FaFileAlt,FaDownload,FaEye,FaPlusCircle} from 'react-icons/fa';
 import './dashboard.css';
-import { getTasksByStatusAuth, updateTaskStatusAuth, updateTaskProgressAuth,updateSubTaskProgressAuth,getUserProfile,sendtaskactivity,gettaskactivity,getBoards,getUser,updateTaskAuth,getTaskDetials } from '../../api/api';  // Import API functions
+import { getTasksByStatusAuth, updateTaskStatusAuth, updateTaskProgressAuth,updateSubTaskProgressAuth,getUserProfile,sendtaskactivity,gettaskactivity,getBoards,getUser,updateTaskAuth,getTaskDetials,remainingtasksvalue } from '../../api/api';  // Import API functions
 import CreateTaskModal from './StaffCreateTask';
 import { io } from 'socket.io-client';
 import moment from 'moment';
@@ -47,7 +47,8 @@ const Tasks = () => {
      const [selectedBoardForTask, setSelectedBoardForTask] = useState(null);
      const [dueDate, setDueDate] = useState('');
      const [taskComment, setTaskComments] = useState([]);
-     const [subtaskComment, setSubTaskComments] = useState([])
+     const [subtaskComment, setSubTaskComments] = useState([]);
+      const [targetvalue , setTargetValue] = useState('');
 
 
 
@@ -148,10 +149,24 @@ const Tasks = () => {
             try {
               const response = await getUserProfile(token);
               setUserDetails(response.data);
+              getTarkgetTaskValue(response.data._id);
             } catch (error) {
               console.error('Error fetching user details', error);
             }
           };
+
+       
+          //fetch targettask
+       const getTarkgetTaskValue = async (userId) => {
+       try {
+         const response = await remainingtasksvalue(userId);
+        setTargetValue(response.data);
+       } catch (error) {
+       console.error("Error getting remaining tasks value", error);
+    }
+  };
+
+
 
           const fetchUsers = async () => {
             try {
@@ -585,6 +600,17 @@ const getUserInitials = (user) => {
             {status !== 'in-progress' && status !== 'completed' && status !== 'pending' && 'Your All Tasks'}
         </strong>
                     </div>
+                    <div class="user-details">
+                     {userDetails.department === '1' && targetvalue.targetValue && targetvalue.remainingTargetValue >= 0 && (
+                        <div class="word-count">
+                        <h6>Total Count</h6>
+                        <p>
+                        <span class="current-count">{targetvalue.remainingTargetValue}</span> / 
+                        <span class="max-count">{targetvalue.targetValue}</span>
+                      </p>
+                    </div>
+                    )}
+                  </div>
                     {status === 'pending' &&  <CButton color="primary" className="me-3" onClick={openCreateTaskModal}>
                         <FaPlus /> Create Task
                     </CButton> }
