@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { getUser, getTaskswithUserId } from '../../api/api';
 import {
   CCard, CCardBody, CCardHeader, CCol, CRow, CButton, CAlert,
-  CInputGroup, CFormInput, COffcanvas, COffcanvasHeader, COffcanvasBody, CSpinner
+  CInputGroup, CFormInput, COffcanvas, COffcanvasHeader, COffcanvasBody, CSpinner, CFormSelect
 } from '@coreui/react';
 import { FaSearch, FaFilter } from 'react-icons/fa';
 import './dashboard.css';
@@ -14,6 +14,7 @@ const Reports = () => {
   const [tasks, setTasks] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState('');
   const [selectedBoard, setSelectedBoard] = useState('');
   const [completionStatus, setCompletionStatus] = useState('');
   const [taskStatus, setTaskStatus] = useState('');
@@ -72,13 +73,21 @@ const Reports = () => {
     setCompletionStatus('');
     setDateRange([null, null]);
     setError('');
-  
+
     if (userId) {
       fetchTasksByUser(userId);
     } else {
       setTasks([]);
     }
   };
+
+  const filteredUsers = useMemo(() => {
+    // Filter users by selected department
+    if (selectedDepartment) {
+      return users.filter(user => user.department === selectedDepartment);
+    }
+    return users;
+  }, [users, selectedDepartment]);
 
   const filteredTasks = useMemo(() => {
     let filtered = tasks;
@@ -147,6 +156,28 @@ const Reports = () => {
                 <strong className="fs-4">View Report</strong>
               </div>
               <div className="d-flex align-items-center">
+                {/* Department Filter */}
+                <CInputGroup className="rounded-pill me-3" style={{ width: '250px' }}>
+                  <CFormSelect
+                    name="department"
+                    options={[
+                      'Select Department',
+                      { label: 'Content Writer', value: '1' },
+                      { label: 'Data Entry', value: '2' },
+                      { label: 'Developer', value: '3' },
+                      { label: 'Graphic Designer', value: '4' },
+                      { label: 'PPC', value: '5' },
+                      { label: 'Seo Executive', value: '6' },
+                      { label: 'Social Media', value: '7' },
+                    ]}
+                    value={selectedDepartment}
+                    onChange={(e) => setSelectedDepartment(e.target.value)}
+                    className="form-control shadow-sm"
+                    style={{ borderRadius: '8px', borderColor: '#ddd' }}
+                  />
+                </CInputGroup>
+
+                {/* Employee Filter */}
                 <CInputGroup className="rounded-pill me-3" style={{ width: '250px' }}>
                   <select
                     className="form-select"
@@ -155,7 +186,7 @@ const Reports = () => {
                     aria-label="Employee Filter"
                   >
                     <option value="">Filter by Employee</option>
-                    {users.map((user) => (
+                    {filteredUsers.map((user) => (
                       <option key={user._id} value={user._id}>
                         {user.username}
                       </option>
